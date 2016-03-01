@@ -1,33 +1,34 @@
 package Model;
 
-import android.util.Pair;
-
-import java.util.ArrayList;
-
 /**
  * Created by L on 3/1/2016.
  */
 public class Shop
 {
-    private ArrayList<Pair<Product, Double>> productsWithPrices;
+    String title;
 
-    public Shop()
+    public Shop(String title)
     {
-        productsWithPrices = new ArrayList<>();
+        this.title = title;
     }
 
-    public ArrayList<Pair<Product, Double>> getProductsWithPrices()
+    @Override
+    public boolean equals(Object o)
     {
-        return productsWithPrices;
+        if (this == o) return true;
+        if (!(o instanceof Shop)) return false;
+
+        Shop shop = (Shop) o;
+
+        return title.equals(shop.title);
+
     }
 
-    public void addProductWithPrice(Pair<Product, Double> product)
+    @Override
+    public String toString()
     {
-        this.productsWithPrices.add(product);
-    }
-
-    public void removeProductWithPrice(Pair<Product, Double> product)
-    {
-        this.productsWithPrices.remove(product);
+        return "Shop{" +
+                "title='" + title + '\'' +
+                '}';
     }
 }
