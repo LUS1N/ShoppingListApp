@@ -24,6 +24,16 @@ public class Storage
     private ArrayList<Shop> shops;
     private ArrayList<ShoppingList> shoppingLists;
 
+
+    public void addShoppingList(ShoppingList shoppingList)
+    {
+        shoppingLists.add(shoppingList);
+    }
+
+    public void removeShoppingList(ShoppingList sl)
+    {
+        shoppingLists.remove(sl);
+    }
     public void addShop(Shop shop)
     {
         if (!this.shops.contains(shop))
@@ -71,6 +81,10 @@ public class Storage
     public ArrayList<Product> getCategoryProducts(String category)
     {
         category = category.toUpperCase();
+        if (!getCategories().contains(category))
+        {
+            throw new RuntimeException("No such category.");
+        }
         return this.products.get(category);
     }
 

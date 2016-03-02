@@ -37,6 +37,7 @@ public class ModelTests
     {
         storage = Storage.getInstance();
         shoppingListManager = new ShoppingListManager();
+        shoppingListManager.addShoppingList("Test");
         Shop bilka = new Shop("Bilka");
         storage.addShop(bilka);
         Product p1 = new Product("Milk", bilka, 6);
@@ -51,9 +52,15 @@ public class ModelTests
     }
 
     @Test
-    public void testStorageGetCategory()
+    public void testStorageGetExistingCategory()
     {
         Assert.assertTrue(!storage.getCategoryProducts("Milk").isEmpty());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetNonExistingCategoryThrowsException()
+    {
+        Assert.assertTrue(storage.getCategoryProducts("Apples").isEmpty());
     }
 
     @Test
@@ -87,11 +94,33 @@ public class ModelTests
     }
 
     @Test
+    public void testAdd_and_remove_products_from_shopping_list()
+    {
+        Product p1 = new Product("Peanut butter", new Shop("Fakta"), 20);
+        shoppingListManager.getShoppingList().addProduct(p1);
+        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 1);
+        shoppingListManager.getShoppingList().addProduct(p1);
+        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 2);
+        shoppingListManager.getShoppingList().removeProduct(p1);
+        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 1);
+        shoppingListManager.getShoppingList().removeProduct(p1);
+        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 0);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testShoppingList_throws_exception_when_trying_to_remove_from_0_amount()
+    {
+        Product p1 = new Product("Peanut butter", new Shop("Fakta"), 20);
+        shoppingListManager.getShoppingList().removeProduct(p1);
+    }
+
+    @Test
     public void testGet_Amount_Of_Product_Added_To_The_ShoppingList()
     {
         shoppingListManager.createProductAndAddToShoppingList("Chcocolate", "Milka", 20,
                 new Shop("Fakta"));
-        shoppingListManager.addProductToList(new Product("Milka", new Shop("Fakta"), 20));
+        shoppingListManager.getShoppingList().addProduct(
+                new Product("Milka", new Shop("Fakta"), 20));
         assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(
                 new Product("Milka", new Shop("Fakta"), 20)) == 2);
     }

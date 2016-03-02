@@ -14,17 +14,13 @@ public class ShoppingListManager
     public ShoppingListManager()
     {
         storage = Storage.getInstance();
-        shoppingList = new ShoppingList();
     }
 
-    public ArrayList<Pair<Product, Integer>> getProducts()
-    {
-        return shoppingList.getProducts();
-    }
 
-    public void addProductToList(Product p)
+    public void addShoppingList(String title)
     {
-        shoppingList.addProduct(p);
+        shoppingList = new ShoppingList(title);
+        storage.addShoppingList(shoppingList);
     }
 
     public ShoppingList getShoppingList()
