@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -91,5 +92,15 @@ public class Storage
     public Set<String> getCategories()
     {
         return this.products.keySet();
+    }
+
+    public void mockData()
+    {
+        shops.addAll(new ArrayList<>(
+                Arrays.asList(new Shop("Fakta"), new Shop("Netto"), new Shop("Bilka"))));
+
+        shoppingLists.addAll(new ArrayList<>(
+                Arrays.asList(new ShoppingList("Breakfast"), new ShoppingList("Sunday"))));
+
     }
 }
