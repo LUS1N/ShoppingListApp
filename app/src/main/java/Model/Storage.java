@@ -26,6 +26,7 @@ public class Storage
 
     public void addShop(Shop shop)
     {
+        if (!this.shops.contains(shop))
         this.shops.add(shop);
     }
 
@@ -62,7 +63,9 @@ public class Storage
         if (!products.containsKey(category))
             products.put(category, new ArrayList<Product>());
 
-        this.products.get(category).add(product);
+        ArrayList<Product> prods = this.products.get(category);
+        if (!prods.contains(product))
+            prods.add(product);
     }
 
     public ArrayList<Product> getCategoryProducts(String category)

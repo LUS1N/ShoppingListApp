@@ -1,5 +1,6 @@
 package Model;
 
+
 import java.util.ArrayList;
 
 /**
@@ -16,7 +17,7 @@ public class ShoppingListManager
         shoppingList = new ShoppingList();
     }
 
-    public ArrayList<Product> getProducts()
+    public ArrayList<Pair<Product, Integer>> getProducts()
     {
         return shoppingList.getProducts();
     }

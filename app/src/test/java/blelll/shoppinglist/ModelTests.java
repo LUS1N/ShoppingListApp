@@ -42,6 +42,7 @@ public class ModelTests
         Product p1 = new Product("Milk", bilka, 6);
 
         storage.addProduct("Milk", p1);
+        storage.addProduct("Milk", p1);
         storage.addProduct("milk", new Product("Arla", bilka, 7));
         storage.addProduct("Butter", new Product("LURPAK", bilka, 20));
         storage.addProduct("Eggs", new Product("Chicken factory", bilka, 22));
@@ -86,13 +87,23 @@ public class ModelTests
     }
 
     @Test
+    public void testGet_Amount_Of_Product_Added_To_The_ShoppingList()
+    {
+        shoppingListManager.createProductAndAddToShoppingList("Chcocolate", "Milka", 20,
+                new Shop("Fakta"));
+        shoppingListManager.addProductToList(new Product("Milka", new Shop("Fakta"), 20));
+        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(
+                new Product("Milka", new Shop("Fakta"), 20)) == 2);
+    }
+
+    @Test
     public void testSLM_canCreatePandAddToShoppingList()
     {
         String cat = "Butter";
         shoppingListManager.createProductAndAddToShoppingList(cat, "Smor", 10,
                 storage.getShops().get(0));
 
-        assertTrue(shoppingListManager.getProducts().contains(
-                new Product("Smor", storage.getShops().get(0), 10)));
+        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(
+                new Product("Smor", storage.getShops().get(0), 10)) > 0);
     }
 }
