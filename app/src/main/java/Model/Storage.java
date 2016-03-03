@@ -103,5 +103,8 @@ public class Storage
         shoppingLists.addAll(new ArrayList<>(
                 Arrays.asList(new ShoppingList("Breakfast"), new ShoppingList("Sunday"))));
 
+        shoppingLists.get(0).addProduct(new Product("Arla milk", shops.get(0), 6));
+        shoppingLists.get(0).addProduct(new Product("Arla milk", shops.get(0), 6));
+
     }
 }

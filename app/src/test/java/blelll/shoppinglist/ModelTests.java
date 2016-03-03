@@ -12,6 +12,7 @@ import java.util.Set;
 
 import Model.Product;
 import Model.Shop;
+import Model.ShoppingList;
 import Model.ShoppingListManager;
 import Model.Storage;
 
@@ -134,5 +135,23 @@ public class ModelTests
 
         assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(
                 new Product("Smor", storage.getShops().get(0), 10)) > 0);
+    }
+
+    @Test
+    public void testSL_get_items()
+    {
+        ShoppingList sl = shoppingListManager.getShoppingList();
+        sl.addProduct(new Product("Arla milk", new Shop("Bilka"), 6));
+        assertTrue(sl.getItemsAmount() == 1);
+        assertTrue(sl.getSize() == 1);
+
+        sl.addProduct(new Product("Arla milk", new Shop("Bilka"), 6));
+        assertTrue(sl.getItemsAmount() == 2);
+        assertTrue(sl.getSize() == 1);
+
+        sl.addProduct(new Product("Dansk milk", new Shop("Bilka"), 6));
+        assertTrue(sl.getItemsAmount() == 3);
+        assertTrue(sl.getSize() == 2);
+
     }
 }

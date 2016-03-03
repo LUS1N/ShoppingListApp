@@ -31,6 +31,12 @@ public class MainActivityFragment extends Fragment
         ListView shoppingListView = (ListView) view.findViewById(R.id.ShoppinglistView);
         Storage storage = Storage.getInstance();
 
+        setAdapter(inflater, shoppingListView, storage);
+        return view;
+    }
+
+    private void setAdapter(final LayoutInflater inflater, ListView shoppingListView, final Storage storage)
+    {
         ArrayAdapter aa =
                 new ArrayAdapter<ShoppingList>(getContext(), R.layout.shopping_list_row,
                         storage.getShoppingLists())
@@ -45,16 +51,19 @@ public class MainActivityFragment extends Fragment
                                     R.layout.shopping_list_row, parent, false);
 
                         ShoppingList current = getItem(position);
+
                         TextView titleTV = (TextView) shoppingListView.findViewById(
                                 R.id.title_textView);
                         titleTV.setText(current.getTitle());
+
                         TextView sizeTV = (TextView) shoppingListView.findViewById(
                                 R.id.size_textView);
-                        sizeTV.setText(getString(R.string.shoppingList_size, current.getSize()));
+                        sizeTV.setText(getString(R.string.shoppingList_size, current.getSize(),
+                                current.getItemsAmount()));
+
                         return shoppingListView;
                     }
                 };
         shoppingListView.setAdapter(aa);
-        return view;
     }
 }

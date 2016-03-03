@@ -26,6 +26,16 @@ public class ShoppingList
     {
         return productsWithAmount.size();
     }
+
+    public int getItemsAmount()
+    {
+        int items = 0;
+        for (Pair<Product, Integer> uniqueItem : productsWithAmount)
+        {
+            items += uniqueItem.second;
+        }
+        return items;
+    }
     public String getTitle()
     {
         return title;
