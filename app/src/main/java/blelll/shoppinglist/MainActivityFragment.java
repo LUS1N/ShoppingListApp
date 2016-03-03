@@ -6,12 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -43,10 +42,43 @@ public class MainActivityFragment extends Fragment
         final View addListHeaderView = inflater.inflate(R.layout.add_list_header, null, false);
         shoppingListView.addHeaderView(addListHeaderView);
 
+        addListHeaderView.setOnClickListener(new ParentOnClickListener());
+
         setupAndSetAdapter(inflater, shoppingListView, storage);
 
         return view;
     }
+
+    /**
+     * Listener for adding new lists
+     */
+    private class ParentOnClickListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+            Toast.makeText(getContext(),
+                    ((TextView) v.findViewById(R.id.add_list_textView)).getText().toString(),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Listener for adding new products to selected list
+     */
+    private class ChildOnClickListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+
+            Toast.makeText(getContext(),
+                    ((TextView) v.findViewById(                     // also access to parent node
+                            R.id.add_product_header)).getText().toString() + " " + v.getParent().toString(),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     private void setupAndSetAdapter(final LayoutInflater inflater, ExpandableListView shoppingListView, final Storage storage)
     {
@@ -76,6 +108,7 @@ public class MainActivityFragment extends Fragment
             @Override
             public int getChildrenCount(int groupPosition)
             {
+                // +1 for index manipulation
                 return shoppingLists.get(groupPosition).getSize() + 1;
             }
 
@@ -143,7 +176,9 @@ public class MainActivityFragment extends Fragment
                 // for the header 0th index is used and all the items in the array are pushed by 1
                 if (childPosition == 0)
                 {
-                    return inflater.inflate(R.layout.add_product_header, parent, false);
+                    View view = inflater.inflate(R.layout.add_product_header, parent, false);
+                    view.setOnClickListener(new ChildOnClickListener());
+                    return view;
                 }
                 else
                 {
@@ -219,35 +254,6 @@ public class MainActivityFragment extends Fragment
         shoppingListView.setAdapter(a);
     }
 
-    private void setAdapter(final LayoutInflater inflater, ListView shoppingListView, final Storage storage)
-    {
-        ArrayAdapter aa =
-                new ArrayAdapter<ShoppingList>(getContext(), R.layout.shopping_list_row,
-                        storage.getShoppingLists())
-                {
-                    @Override
-                    public View getView(int position, View convertView, ViewGroup parent)
-                    {
-                        View shoppingListView = convertView;
 
-                        if (shoppingListView == null)
-                            shoppingListView = inflater.inflate(
-                                    R.layout.shopping_list_row, parent, false);
 
-                        ShoppingList current = getItem(position);
-
-                        TextView titleTV = (TextView) shoppingListView.findViewById(
-                                R.id.title_textView);
-                        titleTV.setText(current.getTitle());
-
-                        TextView sizeTV = (TextView) shoppingListView.findViewById(
-                                R.id.size_textView);
-                        sizeTV.setText(getString(R.string.shoppingList_size, current.getSize(),
-                                current.getItemsAmount()));
-
-                        return shoppingListView;
-                    }
-                };
-        shoppingListView.setAdapter(aa);
-    }
 }
