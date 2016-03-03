@@ -10,12 +10,22 @@ public class ShoppingList
     private ArrayList<Pair<Product, Integer>> productsWithAmount;
     private String title;
 
+    @Override
+    public String toString()
+    {
+        return "ShoppingList " + title + " size: " + productsWithAmount.size();
+    }
+
     public ShoppingList(String title)
     {
         productsWithAmount = new ArrayList<>();
         this.title = title;
     }
 
+    public int getSize()
+    {
+        return productsWithAmount.size();
+    }
     public String getTitle()
     {
         return title;

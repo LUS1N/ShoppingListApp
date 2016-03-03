@@ -17,6 +17,7 @@ public class Storage
         if (storage == null)
         {
             storage = new Storage();
+            storage.mockData();
         }
         return storage;
     }
