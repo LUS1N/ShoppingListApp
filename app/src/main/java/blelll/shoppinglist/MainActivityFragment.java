@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,8 +40,19 @@ public class MainActivityFragment extends Fragment
                 R.id.ShoppingListsExpandableListView);
         final Storage storage = Storage.getInstance();
 
+        final View addListHeaderView = inflater.inflate(R.layout.add_list_header, null, false);
+        shoppingListView.addHeaderView(addListHeaderView);
+
+        setupAndSetAdapter(inflater, shoppingListView, storage);
+
+        return view;
+    }
+
+    private void setupAndSetAdapter(final LayoutInflater inflater, ExpandableListView shoppingListView, final Storage storage)
+    {
         ExpandableListAdapter a = new ExpandableListAdapter()
         {
+            /* extra 'child' is added as the header, so some index manipulation is in tact */
             ArrayList<ShoppingList> shoppingLists = storage.getShoppingLists();
 
             @Override
@@ -64,7 +76,7 @@ public class MainActivityFragment extends Fragment
             @Override
             public int getChildrenCount(int groupPosition)
             {
-                return shoppingLists.get(groupPosition).getSize();
+                return shoppingLists.get(groupPosition).getSize() + 1;
             }
 
             @Override
@@ -76,7 +88,10 @@ public class MainActivityFragment extends Fragment
             @Override
             public Object getChild(int groupPosition, int childPosition)
             {
-                return shoppingLists.get(groupPosition).getProductsWithAmounts().get(childPosition);
+                if (childPosition == 0) return null;
+
+                return shoppingLists.get(groupPosition).getProductsWithAmounts().get(
+                        childPosition - 1);
             }
 
             @Override
@@ -88,7 +103,10 @@ public class MainActivityFragment extends Fragment
             @Override
             public long getChildId(int groupPosition, int childPosition)
             {
-                return 0;
+                if (childPosition == 0)
+                    return 0;
+
+                return getChild(groupPosition, childPosition).hashCode();
             }
 
             @Override
@@ -105,7 +123,6 @@ public class MainActivityFragment extends Fragment
                 if (shoppingListView == null)
                     shoppingListView = inflater.inflate(
                             R.layout.shopping_list_row, parent, false);
-
                 ShoppingList current = (ShoppingList) getGroup(groupPosition);
 
                 TextView titleTV = (TextView) shoppingListView.findViewById(
@@ -123,27 +140,43 @@ public class MainActivityFragment extends Fragment
             @Override
             public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
             {
-                View productListView = convertView;
+                // for the header 0th index is used and all the items in the array are pushed by 1
+                if (childPosition == 0)
+                {
+                    return inflater.inflate(R.layout.add_product_header, parent, false);
+                }
+                else
+                {
+                    // have to check if view is not null or instance of header layout so
+                    // it can be reused
+                    View productListView;
+                    if (convertView == null || !(convertView instanceof LinearLayout))
+                    {
+                        productListView = inflater.inflate(
+                                R.layout.shopping_list_product, parent, false);
+                    }
+                    else
+                        productListView = convertView;
 
-                if (productListView == null)
-                    productListView = inflater.inflate(
-                            R.layout.shopping_list_product, parent, false);
+                    ShoppingList currentSL = (ShoppingList) getGroup(groupPosition);
 
-                ShoppingList currentSL = (ShoppingList) getGroup(groupPosition);
-                Pair<Product, Integer> currentProduct = currentSL.getProductsWithAmounts().get(
-                        childPosition);
+                    // take away 1 to access the real index
+                    Pair<Product, Integer> currentProduct = currentSL.getProductsWithAmounts().get(
+                            childPosition - 1);
 
-                TextView titleTV = (TextView) productListView.findViewById(R.id.product_textView);
-                titleTV.setText(currentProduct.first.getTitle());
+                    // set the text for the product view
+                    TextView titleTV = (TextView) productListView.findViewById(
+                            R.id.product_textView);
+                    titleTV.setText(currentProduct.first.getTitle());
 
-
-                return productListView;
+                    return productListView;
+                }
             }
 
             @Override
             public boolean isChildSelectable(int groupPosition, int childPosition)
             {
-                return false;
+                return true;
             }
 
             @Override
@@ -155,7 +188,7 @@ public class MainActivityFragment extends Fragment
             @Override
             public boolean isEmpty()
             {
-                return false;
+                return shoppingLists.isEmpty();
             }
 
             @Override
@@ -184,8 +217,6 @@ public class MainActivityFragment extends Fragment
         };
 
         shoppingListView.setAdapter(a);
-//        setAdapter(inflater, shoppingListView, storage);
-        return view;
     }
 
     private void setAdapter(final LayoutInflater inflater, ListView shoppingListView, final Storage storage)
