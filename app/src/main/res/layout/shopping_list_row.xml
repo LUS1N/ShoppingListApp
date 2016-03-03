@@ -17,4 +17,6 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/shoppingList_size"
         android:id="@+id/size_textView"/>
+
+
 </LinearLayout>
