@@ -13,7 +13,6 @@ import java.util.Set;
 import Model.Product;
 import Model.Shop;
 import Model.ShoppingList;
-import Model.ShoppingListManager;
 import Model.Storage;
 
 import static org.junit.Assert.assertFalse;
@@ -26,30 +25,33 @@ import static org.junit.Assert.assertTrue;
 public class ModelTests
 {
     Storage storage;
-    ShoppingListManager shoppingListManager;
+    ShoppingList shoppingList;
+
+
     @Test
     public void canCreateProduct()
     {
-        assertNotNull(new Product("Milk", new Shop("Bilka"), 3.20));
+        assertNotNull(new Product("Milk", "Milk", new Shop("Bilka"), 3.20));
     }
 
     @Before
     public void SetUp()
     {
         storage = Storage.getInstance();
-        shoppingListManager = new ShoppingListManager();
-        shoppingListManager.addShoppingList("Test");
+        storage.addShoppingList(new ShoppingList("Test"));
+        shoppingList = storage.getShoppingLists().get(0);
+
         Shop bilka = new Shop("Bilka");
         storage.addShop(bilka);
-        Product p1 = new Product("Milk", bilka, 6);
+        Product p1 = new Product("Milk 3,5", "Milk", bilka, 6);
 
-        storage.addProduct("Milk", p1);
-        storage.addProduct("Milk", p1);
-        storage.addProduct("milk", new Product("Arla", bilka, 7));
-        storage.addProduct("Butter", new Product("LURPAK", bilka, 20));
-        storage.addProduct("Eggs", new Product("Chicken factory", bilka, 22));
-        storage.addProduct("Eggnog", new Product("Eggnog factory", bilka, 100));
-        storage.addProduct("Egg Salad", new Product("Salad factory", bilka, 16));
+        storage.addProduct(p1);
+        storage.addProduct(p1);
+        storage.addProduct(new Product("Arla", "Butter", bilka, 7));
+        storage.addProduct(new Product("LURPAK", "Butter", bilka, 20));
+        storage.addProduct(new Product("Chicken factory", "Eggs", bilka, 22));
+        storage.addProduct(new Product("Eggnog factory", "Eggnog", bilka, 100));
+        storage.addProduct(new Product("Salad factory", "Egg Salad", bilka, 16));
     }
 
     @Test
@@ -80,7 +82,7 @@ public class ModelTests
     @Test
     public void testSLM_findsMatchingCategories()
     {
-        List<String> categories = shoppingListManager.getPossibleCategories("Eg");
+        List<String> categories = storage.getPossibleCategories("Eg");
         assertTrue(categories.containsAll(Arrays.asList("EGGS", "EGGNOG", "EGG SALAD")));
         assertFalse(categories.containsAll(Arrays.asList("MILK", "BUTTER")));
     }
@@ -89,69 +91,60 @@ public class ModelTests
     public void testSLM_canCreateProduct()
     {
         String cat = "Butter";
-        Product product = shoppingListManager.createProduct(cat, "Smor", 10,
-                storage.getShops().get(0));
+        Product product = new Product("Smor", cat, new Shop("Bilka"), 10);
+        storage.addProduct(product);
         assertTrue(storage.getCategoryProducts(cat).contains(product));
     }
 
     @Test
     public void testAdd_and_remove_products_from_shopping_list()
     {
-        Product p1 = new Product("Peanut butter", new Shop("Fakta"), 20);
-        shoppingListManager.getShoppingList().addProduct(p1);
-        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 1);
-        shoppingListManager.getShoppingList().addProduct(p1);
-        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 2);
-        shoppingListManager.getShoppingList().removeProduct(p1);
-        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 1);
-        shoppingListManager.getShoppingList().removeProduct(p1);
-        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(p1) == 0);
+
+        Product p1 = new Product("Peanut butter", "Peanut butter", new Shop("Fakta"), 20);
+        shoppingList.addProduct(p1);
+        assertTrue(shoppingList.getAmountOfProduct(p1) == 1);
+        shoppingList.addProduct(p1);
+        assertTrue(shoppingList.getAmountOfProduct(p1) == 2);
+        shoppingList.removeProduct(p1);
+        assertTrue(shoppingList.getAmountOfProduct(p1) == 1);
+        shoppingList.removeProduct(p1);
+        assertTrue(shoppingList.getAmountOfProduct(p1) == 0);
     }
 
     @Test(expected = RuntimeException.class)
     public void testShoppingList_throws_exception_when_trying_to_remove_from_0_amount()
     {
-        Product p1 = new Product("Peanut butter", new Shop("Fakta"), 20);
-        shoppingListManager.getShoppingList().removeProduct(p1);
+        Product p1 = new Product("Peanut butter", "Peanut butter", new Shop("Fakta"), 20);
+        shoppingList.removeProduct(p1);
     }
 
-    @Test
-    public void testGet_Amount_Of_Product_Added_To_The_ShoppingList()
-    {
-        shoppingListManager.createProductAndAddToShoppingList("Chcocolate", "Milka", 20,
-                new Shop("Fakta"));
-        shoppingListManager.getShoppingList().addProduct(
-                new Product("Milka", new Shop("Fakta"), 20));
-        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(
-                new Product("Milka", new Shop("Fakta"), 20)) == 2);
-    }
 
     @Test
     public void testSLM_canCreatePandAddToShoppingList()
     {
         String cat = "Butter";
-        shoppingListManager.createProductAndAddToShoppingList(cat, "Smor", 10,
-                storage.getShops().get(0));
+        Product product = new Product("Smor", cat, storage.getShops().get(0), 10);
+        shoppingList.addProduct(product);
 
-        assertTrue(shoppingListManager.getShoppingList().getAmountOfProduct(
-                new Product("Smor", storage.getShops().get(0), 10)) > 0);
+        assertTrue(shoppingList.getAmountOfProduct(
+                new Product("Smor", "Butter", storage.getShops().get(0), 10)) > 0);
     }
 
     @Test
     public void testSL_get_items()
     {
-        ShoppingList sl = shoppingListManager.getShoppingList();
-        sl.addProduct(new Product("Arla milk", new Shop("Bilka"), 6));
-        assertTrue(sl.getItemsAmount() == 1);
-        assertTrue(sl.getSize() == 1);
+        ShoppingList shoppingList = new ShoppingList("A");
+        shoppingList.addProduct(new Product("Arla milk", "Milk", new Shop("Bilka"), 6));
+        assertTrue(shoppingList.getItemsAmount() == 1);
+        assertTrue(shoppingList.getSize() == 1);
 
-        sl.addProduct(new Product("Arla milk", new Shop("Bilka"), 6));
-        assertTrue(sl.getItemsAmount() == 2);
-        assertTrue(sl.getSize() == 1);
+        shoppingList.addProduct(new Product("Arla milk", "Milk", new Shop("Bilka"), 6));
+        assertTrue(shoppingList.getItemsAmount() == 2);
+        assertTrue(shoppingList.getSize() == 1);
 
-        sl.addProduct(new Product("Dansk milk", new Shop("Bilka"), 6));
-        assertTrue(sl.getItemsAmount() == 3);
-        assertTrue(sl.getSize() == 2);
+        shoppingList.addProduct(new Product("Dansk milk", "Milk", new Shop("Bilka"), 6));
+        assertTrue(shoppingList.getItemsAmount() == 3);
+        assertTrue(shoppingList.getSize() == 2);
 
     }
 }

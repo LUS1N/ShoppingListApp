@@ -27,6 +27,20 @@ public class Storage
     private ArrayList<ShoppingList> shoppingLists;
 
 
+    /**
+     * Returns all categories that contain the @cat string
+     */
+    public ArrayList<String> getPossibleCategories(String cat)
+    {
+        ArrayList<String> possible = new ArrayList<>();
+
+        for (String category : getCategories())
+        {
+            if (category.contains(cat.toUpperCase()))
+                possible.add(category);
+        }
+        return possible;
+    }
     public void addShoppingList(ShoppingList shoppingList)
     {
         shoppingLists.add(shoppingList);
@@ -63,19 +77,20 @@ public class Storage
         this.products = new HashMap<>();
         this.shops = new ArrayList<>();
         this.shoppingLists = new ArrayList<>();
-
-
     }
 
     /**
-     * Adds a new product to the category
+     * Adds a new product to the category, keeps values under each category unique
      */
-    public void addProduct(String category, Product product)
+    public void addProduct(Product product)
     {
-        category = category.toUpperCase();
+        String category = product.getCategory().toUpperCase();
+
+        // if there's not key with category add new list to the map
         if (!products.containsKey(category))
             products.put(category, new ArrayList<Product>());
 
+        // add it to the list only if there are no duplicate items
         ArrayList<Product> prods = this.products.get(category);
         if (!prods.contains(product))
             prods.add(product);
@@ -104,10 +119,10 @@ public class Storage
         shoppingLists.addAll(new ArrayList<>(
                 Arrays.asList(new ShoppingList("Breakfast"), new ShoppingList("Sunday"))));
 
-        shoppingLists.get(0).addProduct(new Product("Arla milk", shops.get(0), 6));
-        shoppingLists.get(0).addProduct(new Product("Arla milk", shops.get(0), 6));
-        shoppingLists.get(0).addProduct(new Product("Some other milk", shops.get(0), 6));
-        shoppingLists.get(0).addProduct(new Product("Beef meats", shops.get(0), 6));
+        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
+        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
+        shoppingLists.get(0).addProduct(new Product("Some other milk", "Milk", shops.get(0), 6));
+        shoppingLists.get(0).addProduct(new Product("Beef meats", "meat", shops.get(0), 6));
 
     }
 }

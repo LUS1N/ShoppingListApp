@@ -3,7 +3,6 @@ package blelll.shoppinglist;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ public class MainActivityFragment extends Fragment
         shoppingListView.addHeaderView(addListHeaderView);
 
         View icon = view.findViewById(R.id.imageButton);
-        icon.setOnClickListener(new ParentOnClickListener());
+        icon.setOnClickListener(new AddNewListListener());
 
         setupAndSetAdapter(inflater, shoppingListView, storage);
 
@@ -54,7 +53,7 @@ public class MainActivityFragment extends Fragment
     /**
      * Listener for adding new lists
      */
-    private class ParentOnClickListener implements View.OnClickListener
+    private class AddNewListListener implements View.OnClickListener
     {
         @Override
         public void onClick(View v)
