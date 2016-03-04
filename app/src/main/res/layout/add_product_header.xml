@@ -23,6 +23,7 @@
             android:src="@drawable/ic_add_circle_outline_24dp"
             android:background="#00ffffff"
             android:contentDescription="@string/plus_sign"
+            android:onClick="addProductListener"
             android:layout_gravity="center"/>
 
         <LinearLayout
@@ -40,14 +41,14 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText"
+                    android:id="@+id/new_product_title"
                     android:layout_weight="1"
                     android:hint="@string/product_title"/>
 
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText2"
+                    android:id="@+id/new_product_category"
                     android:layout_weight="1"
                     android:hint="@string/product_category"/>
             </LinearLayout>
@@ -62,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/editText3"
+                    android:id="@+id/new_product_price"
                     android:layout_weight="1"
                     android:hint="@string/product_price"/>
 

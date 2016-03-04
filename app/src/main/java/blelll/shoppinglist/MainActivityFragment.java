@@ -3,6 +3,7 @@ package blelll.shoppinglist;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class MainActivityFragment extends Fragment
 
         final View addListHeaderView = inflater.inflate(R.layout.add_list_header, null, false);
         shoppingListView.addHeaderView(addListHeaderView);
+        shoppingListView.setOnChildClickListener(new ProductOnClickListener());
 
         View icon = view.findViewById(R.id.imageButton);
         icon.setOnClickListener(new AddNewListListener());
@@ -53,6 +55,19 @@ public class MainActivityFragment extends Fragment
         return view;
     }
 
+
+    /**
+     * Listener for clicked products
+     */
+    private class ProductOnClickListener implements ExpandableListView.OnChildClickListener
+    {
+        @Override
+        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+        {
+
+            return false;
+        }
+    }
     /**
      * Listener for adding new lists
      */
@@ -61,22 +76,17 @@ public class MainActivityFragment extends Fragment
         @Override
         public void onClick(View v)
         {
-
             View parent = (View) v.getParent();
             View editText = (View) parent.findViewById(R.id.add_list_textView);
-
-
 
             if(!((TextView) editText).getText().toString().isEmpty()) {
                 Storage.getInstance().addShoppingList(new ShoppingList(((TextView) editText).getText().toString()));
                 ((TextView) editText).clearFocus();
                 ((TextView) editText).setText("");
-
-
             }
 
             Toast.makeText(getContext(),
-                    ((TextView) editText).getText().toString(),
+                    "" + editText.getId(),
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -89,11 +99,7 @@ public class MainActivityFragment extends Fragment
         @Override
         public void onClick(View v)
         {
-
-            Toast.makeText(getContext(),
-                    ((TextView) v.findViewById(                     // also access to parent node
-                            R.id.add_product_header)).getText().toString() + " " + v.getParent().toString(),
-                    Toast.LENGTH_LONG).show();
+            Log.w("ME", "" + v.getId());
         }
     }
 
@@ -148,16 +154,13 @@ public class MainActivityFragment extends Fragment
             @Override
             public long getGroupId(int groupPosition)
             {
-                return 0;
+                return groupPosition;
             }
 
             @Override
             public long getChildId(int groupPosition, int childPosition)
             {
-                if (childPosition == 0)
-                    return 0;
-
-                return getChild(groupPosition, childPosition).hashCode();
+                return childPosition - 1;
             }
 
             @Override
@@ -226,7 +229,6 @@ public class MainActivityFragment extends Fragment
                     TextView titleTV = (TextView) productListView.findViewById(
                             R.id.product_textView);
                     titleTV.setText(currentProduct.first.getTitle());
-
                     return productListView;
                 }
             }

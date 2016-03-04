@@ -3,8 +3,10 @@ package blelll.shoppinglist;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -40,7 +42,13 @@ public class MainActivity extends AppCompatActivity
         {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addProductListener(View v)
+    {
+//        EditText pro_title =  v.getParent().findViewById(R.id.new_product_category);
+
+        Log.w("ME", v.getParent() + "");
     }
 }
