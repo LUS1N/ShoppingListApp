@@ -4,4 +4,7 @@
     <string name="shoppingList_title">Shopping list title</string>
     <string name="shoppingList_size">Unique items: %1$d, total: %2$d</string>
     <string name="add_new_list">Add new list</string>
+    <string name="product_title">Item</string>
+    <string name="product_category">Category</string>
+    <string name="product_price">Price</string>
 </resources>
