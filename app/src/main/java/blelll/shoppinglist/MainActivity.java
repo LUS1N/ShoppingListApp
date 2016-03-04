@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity
     public void addProductListener(View v)
     {
         View parent = (View) ((ViewGroup) v.getParent()).getParent();
+        Spinner spinner = (Spinner) parent.findViewById(R.id.spinner);
 
-        Log.w("ME", " text");
+        Log.w("ME", spinner.getSelectedItem().toString() + " text");
     }
 }
