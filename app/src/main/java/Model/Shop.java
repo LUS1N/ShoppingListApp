@@ -27,8 +27,6 @@ public class Shop
     @Override
     public String toString()
     {
-        return "Shop{" +
-                "title='" + title + '\'' +
-                '}';
+        return title;
     }
 }

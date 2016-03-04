@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 
 import Model.Pair;
 import Model.Product;
+import Model.Shop;
 import Model.ShoppingList;
 import Model.Storage;
 
@@ -192,6 +195,11 @@ public class MainActivityFragment extends Fragment
                 if (childPosition == 0)
                 {
                     View view = inflater.inflate(R.layout.add_product_header, parent, false);
+                    Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+                    ArrayAdapter<Shop> adapter = new ArrayAdapter<>(getContext(),
+                            R.layout.support_simple_spinner_dropdown_item, storage.getShops());
+                    spinner.setAdapter(adapter);
+
                     view.setOnClickListener(new ChildOnClickListener());
                     return view;
                 }
