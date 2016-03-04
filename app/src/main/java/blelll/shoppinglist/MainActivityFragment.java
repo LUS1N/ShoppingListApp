@@ -90,7 +90,7 @@ public class MainActivityFragment extends Fragment
 
             Toast.makeText(getContext(),
                     ((TextView) v.findViewById(                     // also access to parent node
-                            R.id.add_product_header)).getText().toString() + " " + v.getParent().toString(),
+                            R.id.add_product_header)).getText().toString() + " " + v.getParent().toString()+1,
                     Toast.LENGTH_LONG).show();
         }
     }
