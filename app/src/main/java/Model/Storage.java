@@ -36,10 +36,11 @@ public class Storage
     {
         shoppingLists.remove(sl);
     }
+
     public void addShop(Shop shop)
     {
         if (!this.shops.contains(shop))
-        this.shops.add(shop);
+            this.shops.add(shop);
     }
 
     public void removeShop(Shop shop)

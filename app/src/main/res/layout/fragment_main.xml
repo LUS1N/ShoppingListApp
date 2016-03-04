@@ -10,13 +10,10 @@
                 tools:showIn="@layout/activity_main">
 
 
-    <!--<ListView-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:id="@+id/ShoppinglistView"-->
-    <!--android:layout_weight="1"/>-->
     <ExpandableListView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ShoppingListsExpandableListView"/>
+        android:groupIndicator="@null"
+        android:id="@+id/ShoppingListsExpandableListView"
+        />
 </LinearLayout>
