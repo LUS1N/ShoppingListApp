@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity
 
     public void addProductListener(View v)
     {
-//        EditText pro_title =  v.getParent().findViewById(R.id.new_product_category);
+        View parent = (View) ((ViewGroup) v.getParent()).getParent();
 
-        Log.w("ME", v.getParent() + "");
+        Log.w("ME", " text");
     }
 }
