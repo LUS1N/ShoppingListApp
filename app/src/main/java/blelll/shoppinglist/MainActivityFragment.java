@@ -3,6 +3,7 @@ package blelll.shoppinglist;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,8 @@ public class MainActivityFragment extends Fragment
         final View addListHeaderView = inflater.inflate(R.layout.add_list_header, null, false);
         shoppingListView.addHeaderView(addListHeaderView);
 
-        addListHeaderView.setOnClickListener(new ParentOnClickListener());
+        View icon = view.findViewById(R.id.imageButton);
+        icon.setOnClickListener(new ParentOnClickListener());
 
         setupAndSetAdapter(inflater, shoppingListView, storage);
 
@@ -57,8 +59,22 @@ public class MainActivityFragment extends Fragment
         @Override
         public void onClick(View v)
         {
+
+            View parent = (View) v.getParent();
+            View editText = (View) parent.findViewById(R.id.add_list_textView);
+
+
+
+            if(!((TextView) editText).getText().toString().isEmpty()) {
+                Storage.getInstance().addShoppingList(new ShoppingList(((TextView) editText).getText().toString()));
+                ((TextView) editText).clearFocus();
+                ((TextView) editText).setText("");
+
+
+            }
+
             Toast.makeText(getContext(),
-                    ((TextView) v.findViewById(R.id.add_list_textView)).getText().toString(),
+                    ((TextView) editText).getText().toString(),
                     Toast.LENGTH_LONG).show();
         }
     }
