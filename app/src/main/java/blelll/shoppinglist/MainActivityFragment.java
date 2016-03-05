@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,6 +32,7 @@ import Model.Storage;
  */
 public class MainActivityFragment extends Fragment
 {
+
 
     public MainActivityFragment()
     {
@@ -60,6 +60,7 @@ public class MainActivityFragment extends Fragment
                 shoppingListView);
 
         shoppingListView.setAdapter(a);
+
     }
 
     private void setupAddListButtonListener(View view)
@@ -119,16 +120,18 @@ public class MainActivityFragment extends Fragment
 
         public RemoveListListener(int groupId) {
             this.groupId = groupId;
+
         }
 
         @Override
         public void onClick(View v)
         {
-
+            View parent = (View) v.getParent().getParent();
+            parent.clearFocus();
             Storage.getInstance().getShoppingLists().remove(groupId);
-            Toast.makeText(getContext(), "" + v.getParent().getParent(), Toast.LENGTH_LONG).show();
         }
     }
+
 
     /**
      * Listener for adding new products to selected list
@@ -246,7 +249,7 @@ public class MainActivityFragment extends Fragment
             ((TextView) shoppingListView.findViewById(
                     R.id.title_textView)).setText(current.getTitle());
 
-            View removeButton = shoppingListView.findViewById(R.id.RemoveListButton);
+            View removeButton = shoppingListView.findViewById(R.id.removeListButton);
             removeButton.setOnClickListener(new RemoveListListener(groupPosition));
 
             //set size

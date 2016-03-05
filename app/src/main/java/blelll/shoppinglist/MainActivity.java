@@ -20,6 +20,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onRestart(){
+        super.onRestart();
+        // Load changes knowing that the Activity has already
+        // been visible within this process.
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
