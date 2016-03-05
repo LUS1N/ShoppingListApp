@@ -3,8 +3,14 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="blelll.shoppinglist.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/add_shop"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/add_shop"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/get_shops"
+        android:orderInCategory="100"
+        android:title="@string/get_shops"
+        android:showAsAction="collapseActionView"
+        />
 </menu>

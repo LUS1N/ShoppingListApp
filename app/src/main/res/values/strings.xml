@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ShoppingList</string>
-    <string name="action_settings">Settings</string>
+    <string name="add_shop">Add Shop</string>
+    <string name="get_shops">Get Shop List</string>
     <string name="shoppingList_title">Shopping list title</string>
     <string name="shoppingList_size">Unique items: %1$d, total: %2$d</string>
     <string name="add_new_list">Add new list</string>
