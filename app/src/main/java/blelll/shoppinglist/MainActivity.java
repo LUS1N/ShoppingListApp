@@ -47,10 +47,13 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+        onClick methods from xml need to be in the activity file
+     */
     public void addProductListener(View v)
     {
         View parent = (View) ((ViewGroup) v.getParent()).getParent();
-        Spinner spinner = (Spinner) parent.findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) parent.findViewById(R.id.shop_spinner);
 
         Log.w("ME", spinner.getSelectedItem().toString() + " text");
     }

@@ -8,4 +8,5 @@
     <string name="product_category">Category</string>
     <string name="product_price">Price</string>
     <string name="plus_sign">Plus sign icon for adding</string>
+    <string name="add_product">Add product</string>
 </resources>

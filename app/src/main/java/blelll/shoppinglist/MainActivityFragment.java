@@ -1,14 +1,15 @@
 package blelll.shoppinglist;
 
+import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -112,27 +113,25 @@ public class MainActivityFragment extends Fragment
     /**
      * Listener for adding new products to selected list
      */
-    private class ChildOnClickListener implements View.OnClickListener
+    private class ChildOnClickListener implements ExpandableListView.OnChildClickListener
     {
         @Override
-        public void onClick(View v)
+        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
         {
-            Log.w("ME", "" + v.getId());
+            return false;
         }
     }
 
-    private class ShoppingList_ExpandableListAdapter implements ExpandableListAdapter
+    private class ShoppingList_ExpandableListAdapter extends BaseExpandableListAdapter
     {
         /* extra 'child' is added as the header, so some index manipulation is in tact */
         private ArrayList<ShoppingList> shoppingLists;
         private LayoutInflater inflater;
-        private ExpandableListView shoppingListView;
         private Storage storage;
 
         public ShoppingList_ExpandableListAdapter(final LayoutInflater inflater, ExpandableListView shoppingListView)
         {
             storage = Storage.getInstance();
-            this.shoppingListView = shoppingListView;
             this.shoppingLists = storage.getShoppingLists();
             this.inflater = inflater;
         }
@@ -143,7 +142,7 @@ public class MainActivityFragment extends Fragment
             // for the header 0th index is used and all the items in the array are pushed by 1
             if (childPosition == 0)
             {
-                return setupHeader(parent);
+                return setupHeader();
             }
             else
             {
@@ -180,17 +179,14 @@ public class MainActivityFragment extends Fragment
         }
 
         @NonNull
-        private View setupHeader(ViewGroup parent)
+        private View setupHeader()
         {
-            View view = inflater.inflate(R.layout.add_product_header, parent, false);
+            AddProductExpandable addProductExpandable = new AddProductExpandable(getContext());
+            addProductExpandable.setAdapter(new Product_ExpandableListAdapter(inflater));
+            addProductExpandable.setGroupIndicator(null);
+            addProductExpandable.setOnChildClickListener(new ChildOnClickListener());
 
-            Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
-            ArrayAdapter<Shop> adapter = new ArrayAdapter<>(getContext(),
-                    R.layout.support_simple_spinner_dropdown_item, storage.getShops());
-            spinner.setAdapter(adapter);
-
-            view.setOnClickListener(new ChildOnClickListener());
-            return view;
+            return addProductExpandable;
         }
 
 
@@ -204,14 +200,16 @@ public class MainActivityFragment extends Fragment
                         R.layout.shopping_list_row, parent, false);
             ShoppingList current = (ShoppingList) getGroup(groupPosition);
 
-            TextView titleTV = (TextView) shoppingListView.findViewById(
-                    R.id.title_textView);
-            titleTV.setText(current.getTitle());
+            // set title
+            ((TextView) shoppingListView.findViewById(
+                    R.id.title_textView)).setText(current.getTitle());
 
-            TextView sizeTV = (TextView) shoppingListView.findViewById(
-                    R.id.size_textView);
-            sizeTV.setText(getString(R.string.shoppingList_size, current.getSize(),
-                    current.getItemsAmount()));
+            //set size
+            ((TextView) shoppingListView.findViewById(R.id.size_textView))
+                    .setText(
+                            getString(R.string.shoppingList_size, // string with placeholders
+                                    current.getSize(),
+                                    current.getItemsAmount()));
 
             return shoppingListView;
         }
@@ -275,8 +273,6 @@ public class MainActivityFragment extends Fragment
         }
 
 
-
-
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition)
         {
@@ -320,6 +316,149 @@ public class MainActivityFragment extends Fragment
         }
     }
 
+    private class Product_ExpandableListAdapter extends BaseExpandableListAdapter
+    {
+        final int groups = 1;
+        final int children = 1;
+        private LayoutInflater inflater;
+
+        public Product_ExpandableListAdapter(LayoutInflater inflater)
+        {
+            this.inflater = inflater;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
+        {
+            convertView = inflater.inflate(R.layout.add_product_header, parent, false);
+            return convertView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
+        {
+            View inputs = (inflater.inflate(R.layout.add_product_inputs, parent, false));
+            Spinner spinner = (Spinner) inputs.findViewById(R.id.shop_spinner);
+
+            ArrayAdapter<Shop> shopsAdapter = new ArrayAdapter<Shop>(getContext(),
+                    R.layout.shop_spinner_item, Storage.getInstance().getShops());
+            spinner.setAdapter(shopsAdapter);
+            return inputs;
+        }
+
+        @Override
+        public void registerDataSetObserver(DataSetObserver observer)
+        {
+
+        }
+
+        @Override
+        public void unregisterDataSetObserver(DataSetObserver observer)
+        {
+
+        }
+
+        @Override
+        public int getGroupCount()
+        {
+            return groups;
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition)
+        {
+            return children;
+        }
+
+        @Override
+        public Object getGroup(int groupPosition)
+        {
+            return "Group " + groupPosition;
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition)
+        {
+            return "Child " + groupPosition + " " + childPosition;
+        }
+
+        @Override
+        public long getGroupId(int groupPosition)
+        {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition)
+        {
+            return childPosition;
+        }
+
+        @Override
+        public boolean hasStableIds()
+        {
+            return false;
+        }
 
 
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean areAllItemsEnabled()
+        {
+            return false;
+        }
+
+        @Override
+        public boolean isEmpty()
+        {
+            return false;
+        }
+
+        @Override
+        public void onGroupExpanded(int groupPosition)
+        {
+
+        }
+
+        @Override
+        public void onGroupCollapsed(int groupPosition)
+        {
+
+        }
+
+        @Override
+        public long getCombinedChildId(long groupId, long childId)
+        {
+            return 0;
+        }
+
+        @Override
+        public long getCombinedGroupId(long groupId)
+        {
+            return 0;
+        }
+    }
+
+    public class AddProductExpandable extends ExpandableListView
+    {
+
+        public AddProductExpandable(Context context)
+        {
+            super(context);
+        }
+
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+        {
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(960,
+                    MeasureSpec.AT_MOST);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(800,
+                    MeasureSpec.AT_MOST);
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
+    }
 }
