@@ -1,10 +1,12 @@
 package blelll.shoppinglist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,8 @@ import Model.Storage;
 public class MainActivityFragment extends Fragment
 {
 
+
+
     public MainActivityFragment()
     {
     }
@@ -58,6 +62,7 @@ public class MainActivityFragment extends Fragment
                 shoppingListView);
 
         shoppingListView.setAdapter(a);
+
     }
 
     private void setupAddListButtonListener(View view)
@@ -116,14 +121,19 @@ public class MainActivityFragment extends Fragment
 
         public RemoveListListener(int groupId) {
             this.groupId = groupId;
+
         }
 
         @Override
         public void onClick(View v)
         {
-          Storage.getInstance().getShoppingLists().remove(groupId);
+            View parent = (View) v.getParent().getParent();
+            parent.clearFocus();
+            Storage.getInstance().getShoppingLists().remove(groupId);
         }
     }
+
+
 
     /**
      * Listener for adding new products to selected list
@@ -241,7 +251,7 @@ public class MainActivityFragment extends Fragment
             ((TextView) shoppingListView.findViewById(
                     R.id.title_textView)).setText(current.getTitle());
 
-            View removeButton = shoppingListView.findViewById(R.id.RemoveListButton);
+            View removeButton = shoppingListView.findViewById(R.id.removeListButton);
             removeButton.setOnClickListener(new RemoveListListener(groupPosition));
 
             //set size
