@@ -47,10 +47,6 @@ public class MainActivityFragment extends Fragment
 
         setupAddShoppingListHeader(inflater, shoppingListView);
 
-
-        View icon = view.findViewById(R.id.addShoppingListButton);
-        icon.setOnClickListener(new AddNewListListener());
-
         setupAddListButtonListener(view);
 
 
@@ -93,6 +89,7 @@ public class MainActivityFragment extends Fragment
             return false;
         }
     }
+
     /**
      * Listener for adding new lists
      */
@@ -104,8 +101,10 @@ public class MainActivityFragment extends Fragment
             View parent = (View) v.getParent();
             View editText = parent.findViewById(R.id.add_list_textView);
 
-            if(!((TextView) editText).getText().toString().isEmpty()) {
-                Storage.getInstance().addShoppingList(new ShoppingList(((TextView) editText).getText().toString()));
+            if (!((TextView) editText).getText().toString().isEmpty())
+            {
+                Storage.getInstance().addShoppingList(
+                        new ShoppingList(((TextView) editText).getText().toString()));
                 (editText).clearFocus();
                 ((TextView) editText).setText("");
             }
@@ -156,6 +155,7 @@ public class MainActivityFragment extends Fragment
             super.onGroupExpanded(groupPosition);
             lastExpandedGroupPosition = groupPosition;
         }
+
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
         {
