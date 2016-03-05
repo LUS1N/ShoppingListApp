@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
@@ -240,7 +241,7 @@ public class MainActivityFragment extends Fragment
         @Override
         public void registerDataSetObserver(DataSetObserver observer)
         {
-
+            super.registerDataSetObserver(observer);
         }
 
         @Override
@@ -349,13 +350,6 @@ public class MainActivityFragment extends Fragment
             this.addProductExpandable = addProductExpandable;
         }
 
-        public Product_ExpandableListAdapter(int outterGroup, LayoutInflater inflater)
-        {
-            this.outterGroup = outterGroup;
-            this.inflater = inflater;
-        }
-
-
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
         {
@@ -409,6 +403,11 @@ public class MainActivityFragment extends Fragment
 
                         Storage.getInstance().getShoppingLists().get(outterGroup).addProduct(pro);
                         addProductExpandable.collapseGroup(groupPosition);
+
+                        ((ExpandableListView) addProductExpandable.getParent()).invalidateViews();
+                        addProductExpandable.refreshDrawableState();
+
+                        hideKeyboard(addProductExpandable);
 
 //                        addProductExpandable.clearFocus();
 //
@@ -541,5 +540,12 @@ public class MainActivityFragment extends Fragment
                     MeasureSpec.AT_MOST);
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
+    }
+
+    private void hideKeyboard(View v)
+    {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }
