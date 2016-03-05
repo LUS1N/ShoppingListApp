@@ -126,9 +126,9 @@ public class MainActivityFragment extends Fragment
         @Override
         public void onClick(View v)
         {
-            View parent = (View) v.getParent().getParent();
-            parent.clearFocus();
             Storage.getInstance().getShoppingLists().remove(groupId);
+            View parent = (View) v.getParent().getParent();
+            ((BaseExpandableListAdapter) ((ExpandableListView) parent).getExpandableListAdapter()).notifyDataSetChanged();
         }
     }
 
@@ -305,19 +305,21 @@ public class MainActivityFragment extends Fragment
         @Override
         public long getGroupId(int groupPosition)
         {
-            return groupPosition;
+            return storage.getShoppingLists().get(groupPosition).hashCode();
         }
 
         @Override
         public long getChildId(int groupPosition, int childPosition)
         {
-            return childPosition - 1;
+            if (childPosition == 0) return 0;
+            return storage.getShoppingLists().get(groupPosition).getProductsWithAmounts().get(
+                    childPosition - 1).hashCode();
         }
 
         @Override
         public boolean hasStableIds()
         {
-            return false;
+            return true;
         }
 
 
@@ -421,7 +423,6 @@ public class MainActivityFragment extends Fragment
                         Product pro = new Product(productItem, productCategory,
                                 new Shop(spinner.getSelectedItem().toString()), productPrice);
                         Storage.getInstance().addProduct(pro);
-
                         Storage.getInstance().getShoppingLists().get(outterGroup).addProduct(pro);
                         addProductExpandable.collapseGroup(groupPosition);
 

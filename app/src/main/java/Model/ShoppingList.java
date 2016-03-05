@@ -93,6 +93,15 @@ public class ShoppingList
         }
     }
 
+
+    @Override
+    public int hashCode()
+    {
+        int result = productsWithAmount.hashCode();
+        result = 31 * result + getTitle().hashCode();
+        return result;
+    }
+
     private void throwException()
     {
         throw new RuntimeException("Can't remove product with amount 0");

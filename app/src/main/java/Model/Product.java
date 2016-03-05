@@ -80,6 +80,17 @@ public class Product
     }
 
     @Override
+    public int hashCode()
+    {
+        int result;
+        long temp;
+        result = getTitle().hashCode();
+        temp = Double.doubleToLongBits(getNormalPrice());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
     public String toString()
     {
         return "Product{" +
