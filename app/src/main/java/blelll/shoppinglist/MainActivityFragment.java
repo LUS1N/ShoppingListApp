@@ -47,7 +47,12 @@ public class MainActivityFragment extends Fragment
 
         setupAddShoppingListHeader(inflater, shoppingListView);
 
+
+        View icon = view.findViewById(R.id.addShoppingListButton);
+        icon.setOnClickListener(new AddNewListListener());
+
         setupAddListButtonListener(view);
+
 
         setupShoppingListExpandableListAdapter(inflater, shoppingListView);
 
@@ -64,7 +69,7 @@ public class MainActivityFragment extends Fragment
 
     private void setupAddListButtonListener(View view)
     {
-        View icon = view.findViewById(R.id.imageButton);
+        View icon = view.findViewById(R.id.addShoppingListButton);
         icon.setOnClickListener(new AddNewListListener());
     }
 
