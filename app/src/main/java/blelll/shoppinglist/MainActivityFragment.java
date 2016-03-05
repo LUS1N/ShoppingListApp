@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -103,8 +104,9 @@ public class MainActivityFragment extends Fragment
             {
                 Storage.getInstance().addShoppingList(
                         new ShoppingList(((TextView) editText).getText().toString()));
-                (editText).clearFocus();
+                editText.clearFocus();
                 ((TextView) editText).setText("");
+                hideKeyboard(v);
             }
         }
     }
@@ -122,7 +124,9 @@ public class MainActivityFragment extends Fragment
         @Override
         public void onClick(View v)
         {
-          Storage.getInstance().getShoppingLists().remove(groupId);
+
+            Storage.getInstance().getShoppingLists().remove(groupId);
+            Toast.makeText(getContext(), "" + v.getParent().getParent(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -418,14 +422,14 @@ public class MainActivityFragment extends Fragment
                         Storage.getInstance().getShoppingLists().get(outterGroup).addProduct(pro);
                         addProductExpandable.collapseGroup(groupPosition);
 
-                        ((ExpandableListView) addProductExpandable.getParent()).invalidateViews();
+                        // collapse and expand to refresh the list
+                        ExpandableListView expandableListView = ((ExpandableListView) addProductExpandable.getParent());
+                        expandableListView.collapseGroup(outterGroup);
+                        expandableListView.expandGroup(outterGroup);
+
                         addProductExpandable.refreshDrawableState();
 
                         hideKeyboard(addProductExpandable);
-
-//                        addProductExpandable.clearFocus();
-//
-//                        notifyDataSetChanged();
                     }
                 }
             });
