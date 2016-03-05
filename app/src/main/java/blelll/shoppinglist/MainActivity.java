@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity
             dialog.show(getFragmentManager(), "NoticeDialogFragment");
 
         }
+        else if (id == R.id.get_shops)
+        {
+            DialogFragment dialog = new ShopListDialogFragment();
+            dialog.show(getFragmentManager(),"NoticeDialogFragment");
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -18,7 +18,7 @@ import Model.Storage;
 /**
  * Created by Andy on 05/03/2016.
  */
-class ShopDialogFragment extends DialogFragment {
+public class ShopDialogFragment extends DialogFragment {
         @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
