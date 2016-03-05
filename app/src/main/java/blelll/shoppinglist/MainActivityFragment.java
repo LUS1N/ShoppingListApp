@@ -41,18 +41,35 @@ public class MainActivityFragment extends Fragment
 
         ExpandableListView shoppingListView = (ExpandableListView) view.findViewById(
                 R.id.ShoppingListsExpandableListView);
-        final Storage storage = Storage.getInstance();
 
+        setupAddShoppingListHeader(inflater, shoppingListView);
+
+        setupAddListButtonListener(view);
+
+        setupShoppingListExpandableListAdapter(inflater, shoppingListView);
+
+        return view;
+    }
+
+    private void setupShoppingListExpandableListAdapter(LayoutInflater inflater, ExpandableListView shoppingListView)
+    {
+        ExpandableListAdapter a = new ShoppingList_ExpandableListAdapter(inflater,
+                shoppingListView);
+
+        shoppingListView.setAdapter(a);
+    }
+
+    private void setupAddListButtonListener(View view)
+    {
+        View icon = view.findViewById(R.id.imageButton);
+        icon.setOnClickListener(new AddNewListListener());
+    }
+
+    private void setupAddShoppingListHeader(LayoutInflater inflater, ExpandableListView shoppingListView)
+    {
         final View addListHeaderView = inflater.inflate(R.layout.add_list_header, null, false);
         shoppingListView.addHeaderView(addListHeaderView);
         shoppingListView.setOnChildClickListener(new ProductOnClickListener());
-
-        View icon = view.findViewById(R.id.imageButton);
-        icon.setOnClickListener(new AddNewListListener());
-
-        setupAndSetAdapter(inflater, shoppingListView, storage);
-
-        return view;
     }
 
 
@@ -103,180 +120,185 @@ public class MainActivityFragment extends Fragment
         }
     }
 
-
-    private void setupAndSetAdapter(final LayoutInflater inflater, ExpandableListView shoppingListView, final Storage storage)
+    private class ShoppingList_ExpandableListAdapter implements ExpandableListAdapter
     {
-        ExpandableListAdapter a = new ExpandableListAdapter()
+        /* extra 'child' is added as the header, so some index manipulation is in tact */
+        private ArrayList<ShoppingList> shoppingLists;
+        private LayoutInflater inflater;
+        private ExpandableListView shoppingListView;
+        private Storage storage;
+
+        public ShoppingList_ExpandableListAdapter(final LayoutInflater inflater, ExpandableListView shoppingListView)
         {
-            /* extra 'child' is added as the header, so some index manipulation is in tact */
-            ArrayList<ShoppingList> shoppingLists = storage.getShoppingLists();
+            storage = Storage.getInstance();
+            this.shoppingListView = shoppingListView;
+            this.shoppingLists = storage.getShoppingLists();
+            this.inflater = inflater;
+        }
 
-            @Override
-            public void registerDataSetObserver(DataSetObserver observer)
+        @Override
+        public void registerDataSetObserver(DataSetObserver observer)
+        {
+
+        }
+
+        @Override
+        public void unregisterDataSetObserver(DataSetObserver observer)
+        {
+
+        }
+
+        @Override
+        public int getGroupCount()
+        {
+            return shoppingLists.size();
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition)
+        {
+            // +1 for index manipulation
+            return shoppingLists.get(groupPosition).getSize() + 1;
+        }
+
+        @Override
+        public Object getGroup(int groupPosition)
+        {
+            return shoppingLists.get(groupPosition);
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition)
+        {
+            if (childPosition == 0) return null;
+
+            return shoppingLists.get(groupPosition).getProductsWithAmounts().get(
+                    childPosition - 1);
+        }
+
+        @Override
+        public long getGroupId(int groupPosition)
+        {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition)
+        {
+            return childPosition - 1;
+        }
+
+        @Override
+        public boolean hasStableIds()
+        {
+            return false;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
+        {
+            View shoppingListView = convertView;
+
+            if (shoppingListView == null)
+                shoppingListView = inflater.inflate(
+                        R.layout.shopping_list_row, parent, false);
+            ShoppingList current = (ShoppingList) getGroup(groupPosition);
+
+            TextView titleTV = (TextView) shoppingListView.findViewById(
+                    R.id.title_textView);
+            titleTV.setText(current.getTitle());
+
+            TextView sizeTV = (TextView) shoppingListView.findViewById(
+                    R.id.size_textView);
+            sizeTV.setText(getString(R.string.shoppingList_size, current.getSize(),
+                    current.getItemsAmount()));
+
+            return shoppingListView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
+        {
+            // for the header 0th index is used and all the items in the array are pushed by 1
+            if (childPosition == 0)
             {
+                View view = inflater.inflate(R.layout.add_product_header, parent, false);
+                Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+                ArrayAdapter<Shop> adapter = new ArrayAdapter<>(getContext(),
+                        R.layout.support_simple_spinner_dropdown_item, storage.getShops());
+                spinner.setAdapter(adapter);
 
+                view.setOnClickListener(new ChildOnClickListener());
+                return view;
             }
-
-            @Override
-            public void unregisterDataSetObserver(DataSetObserver observer)
+            else
             {
-
-            }
-
-            @Override
-            public int getGroupCount()
-            {
-                return shoppingLists.size();
-            }
-
-            @Override
-            public int getChildrenCount(int groupPosition)
-            {
-                // +1 for index manipulation
-                return shoppingLists.get(groupPosition).getSize() + 1;
-            }
-
-            @Override
-            public Object getGroup(int groupPosition)
-            {
-                return shoppingLists.get(groupPosition);
-            }
-
-            @Override
-            public Object getChild(int groupPosition, int childPosition)
-            {
-                if (childPosition == 0) return null;
-
-                return shoppingLists.get(groupPosition).getProductsWithAmounts().get(
-                        childPosition - 1);
-            }
-
-            @Override
-            public long getGroupId(int groupPosition)
-            {
-                return groupPosition;
-            }
-
-            @Override
-            public long getChildId(int groupPosition, int childPosition)
-            {
-                return childPosition - 1;
-            }
-
-            @Override
-            public boolean hasStableIds()
-            {
-                return false;
-            }
-
-            @Override
-            public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
-            {
-                View shoppingListView = convertView;
-
-                if (shoppingListView == null)
-                    shoppingListView = inflater.inflate(
-                            R.layout.shopping_list_row, parent, false);
-                ShoppingList current = (ShoppingList) getGroup(groupPosition);
-
-                TextView titleTV = (TextView) shoppingListView.findViewById(
-                        R.id.title_textView);
-                titleTV.setText(current.getTitle());
-
-                TextView sizeTV = (TextView) shoppingListView.findViewById(
-                        R.id.size_textView);
-                sizeTV.setText(getString(R.string.shoppingList_size, current.getSize(),
-                        current.getItemsAmount()));
-
-                return shoppingListView;
-            }
-
-            @Override
-            public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
-            {
-                // for the header 0th index is used and all the items in the array are pushed by 1
-                if (childPosition == 0)
+                // have to check if view is not null or instance of header layout so
+                // it can be reused
+                View productListView;
+                if (convertView == null || !(convertView instanceof LinearLayout))
                 {
-                    View view = inflater.inflate(R.layout.add_product_header, parent, false);
-                    Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
-                    ArrayAdapter<Shop> adapter = new ArrayAdapter<>(getContext(),
-                            R.layout.support_simple_spinner_dropdown_item, storage.getShops());
-                    spinner.setAdapter(adapter);
-
-                    view.setOnClickListener(new ChildOnClickListener());
-                    return view;
+                    productListView = inflater.inflate(
+                            R.layout.shopping_list_product, parent, false);
                 }
                 else
-                {
-                    // have to check if view is not null or instance of header layout so
-                    // it can be reused
-                    View productListView;
-                    if (convertView == null || !(convertView instanceof LinearLayout))
-                    {
-                        productListView = inflater.inflate(
-                                R.layout.shopping_list_product, parent, false);
-                    }
-                    else
-                        productListView = convertView;
+                    productListView = convertView;
 
-                    ShoppingList currentSL = (ShoppingList) getGroup(groupPosition);
+                ShoppingList currentSL = (ShoppingList) getGroup(groupPosition);
 
-                    // take away 1 to access the real index
-                    Pair<Product, Integer> currentProduct = currentSL.getProductsWithAmounts().get(
-                            childPosition - 1);
+                // take away 1 to access the real index
+                Pair<Product, Integer> currentProduct = currentSL.getProductsWithAmounts().get(
+                        childPosition - 1);
 
-                    // set the text for the product view
-                    TextView titleTV = (TextView) productListView.findViewById(
-                            R.id.product_textView);
-                    titleTV.setText(currentProduct.first.getTitle());
-                    return productListView;
-                }
+                // set the text for the product view
+                TextView titleTV = (TextView) productListView.findViewById(
+                        R.id.product_textView);
+                titleTV.setText(currentProduct.first.getTitle());
+                return productListView;
             }
+        }
 
-            @Override
-            public boolean isChildSelectable(int groupPosition, int childPosition)
-            {
-                return true;
-            }
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition)
+        {
+            return true;
+        }
 
-            @Override
-            public boolean areAllItemsEnabled()
-            {
-                return false;
-            }
+        @Override
+        public boolean areAllItemsEnabled()
+        {
+            return false;
+        }
 
-            @Override
-            public boolean isEmpty()
-            {
-                return shoppingLists.isEmpty();
-            }
+        @Override
+        public boolean isEmpty()
+        {
+            return shoppingLists.isEmpty();
+        }
 
-            @Override
-            public void onGroupExpanded(int groupPosition)
-            {
+        @Override
+        public void onGroupExpanded(int groupPosition)
+        {
 
-            }
+        }
 
-            @Override
-            public void onGroupCollapsed(int groupPosition)
-            {
+        @Override
+        public void onGroupCollapsed(int groupPosition)
+        {
 
-            }
+        }
 
-            @Override
-            public long getCombinedChildId(long groupId, long childId)
-            {
-                return 0;
-            }
+        @Override
+        public long getCombinedChildId(long groupId, long childId)
+        {
+            return 0;
+        }
 
-            @Override
-            public long getCombinedGroupId(long groupId)
-            {
-                return 0;
-            }
-        };
-
-        shoppingListView.setAdapter(a);
+        @Override
+        public long getCombinedGroupId(long groupId)
+        {
+            return 0;
+        }
     }
 
 
