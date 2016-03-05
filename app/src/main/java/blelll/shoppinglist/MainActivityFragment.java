@@ -46,10 +46,8 @@ public class MainActivityFragment extends Fragment
                 R.id.ShoppingListsExpandableListView);
 
         setupAddShoppingListHeader(inflater, shoppingListView);
-
+        
         setupAddListButtonListener(view);
-
-
         setupShoppingListExpandableListAdapter(inflater, shoppingListView);
 
         return view;
