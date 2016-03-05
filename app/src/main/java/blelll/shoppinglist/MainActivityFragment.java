@@ -17,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -105,10 +104,6 @@ public class MainActivityFragment extends Fragment
                 (editText).clearFocus();
                 ((TextView) editText).setText("");
             }
-
-            Toast.makeText(getContext(),
-                    "" + editText.getId(),
-                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -409,10 +404,10 @@ public class MainActivityFragment extends Fragment
 
                         Storage.getInstance().getShoppingLists().get(outterGroup).addProduct(pro);
                         addProductExpandable.collapseGroup(groupPosition);
-                        Toast.makeText(getContext(),
-                                Storage.getInstance().getShoppingLists().get(outterGroup) + "",
-                                Toast.LENGTH_LONG).show();
 
+//                        addProductExpandable.clearFocus();
+//
+//                        notifyDataSetChanged();
                     }
                 }
             });
