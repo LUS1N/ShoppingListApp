@@ -2,6 +2,7 @@ package blelll.shoppinglist;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -137,6 +138,85 @@ public class MainActivityFragment extends Fragment
         }
 
         @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
+        {
+            // for the header 0th index is used and all the items in the array are pushed by 1
+            if (childPosition == 0)
+            {
+                return setupHeader(parent);
+            }
+            else
+            {
+                return setupProductRows(groupPosition, childPosition, convertView, parent);
+
+            }
+        }
+
+        @NonNull
+        private View setupProductRows(int groupPosition, int childPosition, View convertView, ViewGroup parent)
+        {
+            // have to check if view is not null or instance of header layout so
+            // it can be reused
+            View productListView;
+            if (convertView == null || !(convertView instanceof LinearLayout))
+            {
+                productListView = inflater.inflate(
+                        R.layout.shopping_list_product, parent, false);
+            }
+            else
+                productListView = convertView;
+
+            ShoppingList currentSL = (ShoppingList) getGroup(groupPosition);
+
+            // take away 1 to access the real index
+            Pair<Product, Integer> currentProduct = currentSL.getProductsWithAmounts().get(
+                    childPosition - 1);
+
+            // set the text for the product view
+            TextView titleTV = (TextView) productListView.findViewById(
+                    R.id.product_textView);
+            titleTV.setText(currentProduct.first.getTitle());
+            return productListView;
+        }
+
+        @NonNull
+        private View setupHeader(ViewGroup parent)
+        {
+            View view = inflater.inflate(R.layout.add_product_header, parent, false);
+
+            Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
+            ArrayAdapter<Shop> adapter = new ArrayAdapter<>(getContext(),
+                    R.layout.support_simple_spinner_dropdown_item, storage.getShops());
+            spinner.setAdapter(adapter);
+
+            view.setOnClickListener(new ChildOnClickListener());
+            return view;
+        }
+
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
+        {
+            View shoppingListView = convertView;
+
+            if (shoppingListView == null)
+                shoppingListView = inflater.inflate(
+                        R.layout.shopping_list_row, parent, false);
+            ShoppingList current = (ShoppingList) getGroup(groupPosition);
+
+            TextView titleTV = (TextView) shoppingListView.findViewById(
+                    R.id.title_textView);
+            titleTV.setText(current.getTitle());
+
+            TextView sizeTV = (TextView) shoppingListView.findViewById(
+                    R.id.size_textView);
+            sizeTV.setText(getString(R.string.shoppingList_size, current.getSize(),
+                    current.getItemsAmount()));
+
+            return shoppingListView;
+        }
+
+        @Override
         public void registerDataSetObserver(DataSetObserver observer)
         {
 
@@ -194,69 +274,8 @@ public class MainActivityFragment extends Fragment
             return false;
         }
 
-        @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
-        {
-            View shoppingListView = convertView;
 
-            if (shoppingListView == null)
-                shoppingListView = inflater.inflate(
-                        R.layout.shopping_list_row, parent, false);
-            ShoppingList current = (ShoppingList) getGroup(groupPosition);
 
-            TextView titleTV = (TextView) shoppingListView.findViewById(
-                    R.id.title_textView);
-            titleTV.setText(current.getTitle());
-
-            TextView sizeTV = (TextView) shoppingListView.findViewById(
-                    R.id.size_textView);
-            sizeTV.setText(getString(R.string.shoppingList_size, current.getSize(),
-                    current.getItemsAmount()));
-
-            return shoppingListView;
-        }
-
-        @Override
-        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
-        {
-            // for the header 0th index is used and all the items in the array are pushed by 1
-            if (childPosition == 0)
-            {
-                View view = inflater.inflate(R.layout.add_product_header, parent, false);
-                Spinner spinner = (Spinner) view.findViewById(R.id.spinner);
-                ArrayAdapter<Shop> adapter = new ArrayAdapter<>(getContext(),
-                        R.layout.support_simple_spinner_dropdown_item, storage.getShops());
-                spinner.setAdapter(adapter);
-
-                view.setOnClickListener(new ChildOnClickListener());
-                return view;
-            }
-            else
-            {
-                // have to check if view is not null or instance of header layout so
-                // it can be reused
-                View productListView;
-                if (convertView == null || !(convertView instanceof LinearLayout))
-                {
-                    productListView = inflater.inflate(
-                            R.layout.shopping_list_product, parent, false);
-                }
-                else
-                    productListView = convertView;
-
-                ShoppingList currentSL = (ShoppingList) getGroup(groupPosition);
-
-                // take away 1 to access the real index
-                Pair<Product, Integer> currentProduct = currentSL.getProductsWithAmounts().get(
-                        childPosition - 1);
-
-                // set the text for the product view
-                TextView titleTV = (TextView) productListView.findViewById(
-                        R.id.product_textView);
-                titleTV.setText(currentProduct.first.getTitle());
-                return productListView;
-            }
-        }
 
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition)
