@@ -47,10 +47,7 @@ public class MainActivityFragment extends Fragment
                 R.id.ShoppingListsExpandableListView);
 
         setupAddShoppingListHeader(inflater, shoppingListView);
-
         setupAddListButtonListener(view);
-
-
         setupShoppingListExpandableListAdapter(inflater, shoppingListView);
 
         return view;
@@ -109,6 +106,23 @@ public class MainActivityFragment extends Fragment
                 (editText).clearFocus();
                 ((TextView) editText).setText("");
             }
+        }
+    }
+    /**
+     * Listener for removing lists
+     */
+    private class RemoveListListener implements View.OnClickListener
+    {
+        int groupId;
+
+        public RemoveListListener(int groupId) {
+            this.groupId = groupId;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+          Storage.getInstance().getShoppingLists().remove(groupId);
         }
     }
 
@@ -227,6 +241,9 @@ public class MainActivityFragment extends Fragment
             // set title
             ((TextView) shoppingListView.findViewById(
                     R.id.title_textView)).setText(current.getTitle());
+
+            View removeButton = shoppingListView.findViewById(R.id.RemoveListButton);
+            removeButton.setOnClickListener(new RemoveListListener(groupPosition));
 
             //set size
             ((TextView) shoppingListView.findViewById(R.id.size_textView))
@@ -369,13 +386,11 @@ public class MainActivityFragment extends Fragment
             spinner.setAdapter(shopsAdapter);
 
             ImageButton addButton = (ImageButton) inputs.findViewById(R.id.add_product_button);
-            addButton.setOnClickListener(new View.OnClickListener()
-            {
+            addButton.setOnClickListener(new View.OnClickListener() {
 
 
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     View parent = (View) ((ViewGroup) v.getParent()).getParent();
 
                     String productItem = ((EditText) parent.findViewById(
@@ -387,8 +402,7 @@ public class MainActivityFragment extends Fragment
                             R.id.new_product_price)).getText().toString();
 
 
-                    if (productItem != null && productItem.length() > 0)
-                    {
+                    if (productItem != null && productItem.length() > 0) {
                         double productPrice;
                         if (productCategory == null)
                             productCategory = "";
