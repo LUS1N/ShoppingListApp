@@ -1,24 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:orientation="vertical">
 
-              android:orientation="vertical"
-    >
-
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/shoppingList_title"
-        android:id="@+id/title_textView"/>
+        android:layout_height="match_parent"
+        >
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/shoppingList_title"
+            android:id="@+id/title_textView"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/shoppingList_size"
+            android:id="@+id/size_textView"
+            />
+
+    </LinearLayout>
+
+    <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/shoppingList_size"
-        android:id="@+id/size_textView"/>
+        android:layout_height="@dimen/circle_icon_height"
+        android:id="@+id/imageView"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_gravity="end|center"
+        android:src="@drawable/ic_remove_circle_outline_24dp"
+        android:background="#00ffffff"
+        android:contentDescription="@string/minus_sign" />
 
 
-</LinearLayout>
+</GridLayout>

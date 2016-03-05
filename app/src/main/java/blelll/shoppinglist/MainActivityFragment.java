@@ -42,7 +42,7 @@ public class MainActivityFragment extends Fragment
         final View addListHeaderView = inflater.inflate(R.layout.add_list_header, null, false);
         shoppingListView.addHeaderView(addListHeaderView);
 
-        View icon = view.findViewById(R.id.imageButton);
+        View icon = view.findViewById(R.id.addShoppingListButton);
         icon.setOnClickListener(new AddNewListListener());
 
         setupAndSetAdapter(inflater, shoppingListView, storage);
