@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -96,11 +98,11 @@ public class MainActivityFragment extends Fragment
         public void onClick(View v)
         {
             View parent = (View) v.getParent();
-            View editText = (View) parent.findViewById(R.id.add_list_textView);
+            View editText = parent.findViewById(R.id.add_list_textView);
 
             if(!((TextView) editText).getText().toString().isEmpty()) {
                 Storage.getInstance().addShoppingList(new ShoppingList(((TextView) editText).getText().toString()));
-                ((TextView) editText).clearFocus();
+                (editText).clearFocus();
                 ((TextView) editText).setText("");
             }
 
@@ -118,6 +120,7 @@ public class MainActivityFragment extends Fragment
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
         {
+
             return false;
         }
     }
@@ -128,21 +131,38 @@ public class MainActivityFragment extends Fragment
         private ArrayList<ShoppingList> shoppingLists;
         private LayoutInflater inflater;
         private Storage storage;
+        int lastExpandedGroupPosition;
+        ExpandableListView listView;
 
-        public ShoppingList_ExpandableListAdapter(final LayoutInflater inflater, ExpandableListView shoppingListView)
+        public ShoppingList_ExpandableListAdapter(final LayoutInflater inflater, ExpandableListView listView)
         {
             storage = Storage.getInstance();
             this.shoppingLists = storage.getShoppingLists();
             this.inflater = inflater;
+            this.listView = listView;
+
         }
 
+        @Override
+        public void onGroupExpanded(int groupPosition)
+        {
+            //collapse the old expanded group, if not the same
+            //as new group to expand
+            if (groupPosition != lastExpandedGroupPosition)
+            {
+                listView.collapseGroup(lastExpandedGroupPosition);
+            }
+
+            super.onGroupExpanded(groupPosition);
+            lastExpandedGroupPosition = groupPosition;
+        }
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
         {
             // for the header 0th index is used and all the items in the array are pushed by 1
             if (childPosition == 0)
             {
-                return setupHeader();
+                return setupHeader(groupPosition);
             }
             else
             {
@@ -179,10 +199,13 @@ public class MainActivityFragment extends Fragment
         }
 
         @NonNull
-        private View setupHeader()
+        private View setupHeader(int group)
         {
-            AddProductExpandable addProductExpandable = new AddProductExpandable(getContext());
-            addProductExpandable.setAdapter(new Product_ExpandableListAdapter(inflater));
+            AddProductExpandable addProductExpandable = new AddProductExpandable(getContext(),
+                    group);
+            addProductExpandable.setAdapter(
+                    new Product_ExpandableListAdapter(addProductExpandable,
+                            addProductExpandable.getGroup(), inflater));
             addProductExpandable.setGroupIndicator(null);
             addProductExpandable.setOnChildClickListener(new ChildOnClickListener());
 
@@ -291,11 +314,6 @@ public class MainActivityFragment extends Fragment
             return shoppingLists.isEmpty();
         }
 
-        @Override
-        public void onGroupExpanded(int groupPosition)
-        {
-
-        }
 
         @Override
         public void onGroupCollapsed(int groupPosition)
@@ -321,11 +339,22 @@ public class MainActivityFragment extends Fragment
         final int groups = 1;
         final int children = 1;
         private LayoutInflater inflater;
+        int outterGroup;
+        AddProductExpandable addProductExpandable;
 
-        public Product_ExpandableListAdapter(LayoutInflater inflater)
+        public Product_ExpandableListAdapter(AddProductExpandable addProductExpandable, int outterGroup, LayoutInflater inflater)
         {
             this.inflater = inflater;
+            this.outterGroup = outterGroup;
+            this.addProductExpandable = addProductExpandable;
         }
+
+        public Product_ExpandableListAdapter(int outterGroup, LayoutInflater inflater)
+        {
+            this.outterGroup = outterGroup;
+            this.inflater = inflater;
+        }
+
 
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
@@ -335,14 +364,59 @@ public class MainActivityFragment extends Fragment
         }
 
         @Override
-        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
+        public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
         {
             View inputs = (inflater.inflate(R.layout.add_product_inputs, parent, false));
-            Spinner spinner = (Spinner) inputs.findViewById(R.id.shop_spinner);
+            final Spinner spinner = (Spinner) inputs.findViewById(R.id.shop_spinner);
 
-            ArrayAdapter<Shop> shopsAdapter = new ArrayAdapter<Shop>(getContext(),
-                    R.layout.shop_spinner_item, Storage.getInstance().getShops());
+            ArrayAdapter<Shop> shopsAdapter = new ArrayAdapter<>(getContext(),
+                    R.layout.support_simple_spinner_dropdown_item,
+                    Storage.getInstance().getShops());
             spinner.setAdapter(shopsAdapter);
+
+            ImageButton addButton = (ImageButton) inputs.findViewById(R.id.add_product_button);
+            addButton.setOnClickListener(new View.OnClickListener()
+            {
+
+
+                @Override
+                public void onClick(View v)
+                {
+                    View parent = (View) ((ViewGroup) v.getParent()).getParent();
+
+                    String productItem = ((EditText) parent.findViewById(
+                            R.id.new_product_title)).getText().toString();
+                    String productCategory = ((EditText) parent.findViewById(
+                            R.id.new_product_category)).getText().toString();
+
+                    String priceString = ((EditText) parent.findViewById(
+                            R.id.new_product_price)).getText().toString();
+
+
+                    if (productItem != null && productItem.length() > 0)
+                    {
+                        double productPrice;
+                        if (productCategory == null)
+                            productCategory = "";
+                        if (priceString == null || priceString.length() < 1)
+                            productPrice = 0;
+                        else
+                            productPrice = Double.parseDouble(priceString);
+
+                        Product pro = new Product(productItem, productCategory,
+                                new Shop(spinner.getSelectedItem().toString()), productPrice);
+                        Storage.getInstance().addProduct(pro);
+
+                        Storage.getInstance().getShoppingLists().get(outterGroup).addProduct(pro);
+                        addProductExpandable.collapseGroup(groupPosition);
+                        Toast.makeText(getContext(),
+                                Storage.getInstance().getShoppingLists().get(outterGroup) + "",
+                                Toast.LENGTH_LONG).show();
+
+                    }
+                }
+            });
+
             return inputs;
         }
 
@@ -444,12 +518,19 @@ public class MainActivityFragment extends Fragment
         }
     }
 
-    public class AddProductExpandable extends ExpandableListView
+    private class AddProductExpandable extends ExpandableListView
     {
+        private int group;
 
-        public AddProductExpandable(Context context)
+        public int getGroup()
+        {
+            return group;
+        }
+
+        public AddProductExpandable(Context context, int group)
         {
             super(context);
+            this.group = group;
         }
 
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)

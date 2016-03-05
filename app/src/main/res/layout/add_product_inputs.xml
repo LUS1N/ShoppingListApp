@@ -12,14 +12,12 @@
         android:src="@drawable/ic_add_circle_outline_24dp"
         android:background="#00ffffff"
         android:contentDescription="@string/plus_sign"
-        android:onClick="addProductListener"
         android:layout_gravity="center"/>
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:visibility="visible">
 
         <LinearLayout

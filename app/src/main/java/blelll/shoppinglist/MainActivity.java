@@ -3,12 +3,8 @@ package blelll.shoppinglist;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -47,14 +43,4 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-        onClick methods from xml need to be in the activity file
-     */
-    public void addProductListener(View v)
-    {
-        View parent = (View) ((ViewGroup) v.getParent()).getParent();
-        Spinner spinner = (Spinner) parent.findViewById(R.id.shop_spinner);
-
-        Log.w("ME", spinner.getSelectedItem().toString() + " text");
-    }
 }
