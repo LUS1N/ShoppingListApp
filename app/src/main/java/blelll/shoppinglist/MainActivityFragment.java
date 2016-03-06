@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import Model.Pair;
@@ -213,10 +214,27 @@ public class MainActivityFragment extends Fragment
             Pair<Product, Integer> currentProduct = currentSL.getProductsWithAmounts().get(
                     childPosition - 1);
 
-            // set the text for the product view
-            TextView titleTV = (TextView) productListView.findViewById(
-                    R.id.product_title_textView);
-            titleTV.setText(currentProduct.first.getTitle());
+            // set the text for the product title
+            ((TextView) productListView.findViewById(R.id.product_title_textView)).
+                    setText(
+                            currentProduct.first.getTitle());
+
+            // add prices formatted as a money format from current locale
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+            ((TextView) productListView.findViewById(R.id.product_price_textView)).setText(
+                    currencyFormat.format(currentProduct.first.getNormalPrice()));
+
+            ((TextView) productListView.findViewById(R.id.total_price_textView)).setText(
+                    getString(R.string.total_products_price,
+                            currencyFormat.format(
+                                    currentProduct.first.getNormalPrice() * currentProduct.second)
+                    ));
+//
+//            ((TextView) (productListView.findViewById(
+//                    R.id.product_amount_and_buttons)).findViewById(
+//                    R.id.product_amount_textview)).setText(
+//                    currentProduct.second);
+
             return productListView;
         }
 

@@ -2,41 +2,53 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:columnCount="4"
+            android:rowCount="1"
+            android:columnOrderPreserved="true"
+    >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="title"
         android:maxLength="20"
         android:id="@+id/product_title_textView"
-        android:paddingTop="@dimen/product_text_top_padding"/>
+        android:paddingTop="@dimen/product_text_top_padding"
+        android:layout_column="0"
+        android:layout_columnWeight="1"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="price"
         android:id="@+id/product_price_textView"
         android:paddingLeft="@dimen/product_price_left_padding"
         android:maxLength="5"
-        android:paddingTop="@dimen/product_text_top_padding"/>
+        android:paddingTop="@dimen/product_text_top_padding"
+        android:layout_column="1"
+        android:layout_columnWeight="1"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:paddingLeft="@dimen/product_price_left_padding"
-        android:maxLength="5"
-        android:text="20"
-        android:id="@+id/total_price_textView"/>
+        android:maxLength="12"
+        android:id="@+id/total_price_textView"
+        android:layout_column="2"
+        android:layout_columnWeight="1"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right">
+        android:layout_gravity="right"
+        android:layout_column="3"
+        android:id="@+id/product_amount_and_buttons"
+        android:layout_columnWeight="1">
 
         <ImageButton
             android:layout_width="wrap_content"
