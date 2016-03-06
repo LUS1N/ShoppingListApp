@@ -112,15 +112,25 @@ public class ModelTests
     }
 
     @Test(expected = RuntimeException.class)
-    public void testShoppingList_throws_exception_when_trying_to_remove_from_0_amount()
+    public void testShoppingList_throws_exception_when_trying_to_remove_item_not_in_list()
     {
         Product p1 = new Product("Peanut butter", "Peanut butter", new Shop("Fakta"), 20);
         shoppingList.removeProduct(p1);
     }
 
+    @Test
+    public void testRemovesItemFromListWhenAmountReaches0()
+    {
+        Product p1 = new Product("Peanut butter", "Peanut butter", new Shop("Fakta"), 20);
+        shoppingList.addProduct(p1);
+        assertTrue(shoppingList.contains(p1));
+        shoppingList.removeProduct(p1);
+        assertFalse(shoppingList.contains(p1));
+    }
+
 
     @Test
-    public void testSLM_canCreatePandAddToShoppingList()
+    public void testSL_canCreatePandAddToShoppingList()
     {
         String cat = "Butter";
         Product product = new Product("Smor", cat, storage.getShops().get(0), 10);

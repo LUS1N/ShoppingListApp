@@ -66,7 +66,7 @@ public class ShoppingList
         if (contains(product))
         {
             if (getProductAndAmount(product).second + amount < 0)
-                throwException();
+                removePairFromList(product);
 
             getProductAndAmount(product).second += amount;
             if (getProductAndAmount(product).second == 0)
@@ -118,6 +118,16 @@ public class ShoppingList
         return 0;
     }
 
+    public void removeProduct(int index)
+    {
+        Product p = productsWithAmount.get(index).first;
+        removeProduct(p);
+    }
+
+    public Product getProduct(int index)
+    {
+        return productsWithAmount.get(index).first;
+    }
     private Pair<Product, Integer> getProductAndAmount(Product product)
     {
         for (Pair<Product, Integer> pair : productsWithAmount)
@@ -128,7 +138,7 @@ public class ShoppingList
         return null;
     }
 
-    private boolean contains(Product product)
+    public boolean contains(Product product)
     {
         for (Pair<Product, Integer> pair : productsWithAmount)
         {

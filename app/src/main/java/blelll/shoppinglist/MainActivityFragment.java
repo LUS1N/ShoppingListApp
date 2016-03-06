@@ -5,6 +5,7 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import Model.Storage;
 public class MainActivityFragment extends Fragment
 {
 
-
+    ExpandableListView shoppingListView;
     public MainActivityFragment()
     {
     }
@@ -45,7 +46,7 @@ public class MainActivityFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ExpandableListView shoppingListView = (ExpandableListView) view.findViewById(
+        shoppingListView = (ExpandableListView) view.findViewById(
                 R.id.ShoppingListsExpandableListView);
 
         setupAddShoppingListHeader(inflater, shoppingListView);
@@ -74,20 +75,41 @@ public class MainActivityFragment extends Fragment
     {
         shoppingListView.addHeaderView(
                 inflater.inflate(R.layout.add_list_header, shoppingListView, false));
-        shoppingListView.setOnChildClickListener(new ProductOnClickListener());
     }
 
+    /**
+     * Listener for adding new products to selected list
+     */
+    private class DecreaseProductAmountListener implements View.OnClickListener
+    {
+        int group, child;
+        ExpandableListView expandableListView;
+
+        public DecreaseProductAmountListener(int group, int child, ExpandableListView expandableListView)
+        {
+            this.group = group;
+            this.child = child;
+            this.expandableListView = expandableListView;
+        }
+
+
+        @Override
+        public void onClick(View v)
+        {
+            Storage.getInstance().getShoppingLists().get(group).removeProduct(child);
+            ((BaseExpandableListAdapter) expandableListView.getExpandableListAdapter()).notifyDataSetChanged();
+        }
+    }
 
     /**
      * Listener for clicked products
      */
-    private class ProductOnClickListener implements ExpandableListView.OnChildClickListener
+    private class AddProductAmountListener implements View.OnClickListener
     {
         @Override
-        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+        public void onClick(View v)
         {
 
-            return false;
         }
     }
 
@@ -102,16 +124,21 @@ public class MainActivityFragment extends Fragment
             View parent = (View) v.getParent();
             View editText = parent.findViewById(R.id.add_list_textView);
 
-            if (!((TextView) editText).getText().toString().isEmpty())
+            String title = ((TextView) editText).getText().toString();
+            if (!title.isEmpty())
             {
+                if (title.length() > 15)
+                    title = title.substring(0, 15);
+
                 Storage.getInstance().addShoppingList(
-                        new ShoppingList(((TextView) editText).getText().toString()));
+                        new ShoppingList(title));
                 editText.clearFocus();
                 ((TextView) editText).setText("");
                 hideKeyboard(v);
             }
         }
     }
+
     /**
      * Listener for removing lists
      */
@@ -119,7 +146,8 @@ public class MainActivityFragment extends Fragment
     {
         int groupId;
 
-        public RemoveListListener(int groupId) {
+        public RemoveListListener(int groupId)
+        {
             this.groupId = groupId;
 
         }
@@ -134,18 +162,7 @@ public class MainActivityFragment extends Fragment
     }
 
 
-    /**
-     * Listener for adding new products to selected list
-     */
-    private class ChildOnClickListener implements ExpandableListView.OnChildClickListener
-    {
-        @Override
-        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
-        {
 
-            return false;
-        }
-    }
 
     private class ShoppingList_ExpandableListAdapter extends BaseExpandableListAdapter
     {
@@ -234,8 +251,15 @@ public class MainActivityFragment extends Fragment
             ((TextView) ((productListView.findViewById(R.id.product_amount_textview)))).setText(
                     currentProduct.second + "");
 
+            ImageButton decreaseButton = (ImageButton) productListView.findViewById(
+                    R.id.product_decrease_amount_button);
+//            DecreaseProductAmountListener decreaseListener = new DecreaseProductAmountListener(
+//                    groupPosition, childPosition, ((ExpandableListView) productListView));
 
-            
+//            decreaseButton.setOnClickListener(decreaseListener);
+
+            Log.d("BB", productListView.getParent() + "");
+
 
             return productListView;
         }
@@ -249,7 +273,6 @@ public class MainActivityFragment extends Fragment
                     new Product_ExpandableListAdapter(addProductExpandable,
                             addProductExpandable.getGroup(), inflater));
             addProductExpandable.setGroupIndicator(null);
-            addProductExpandable.setOnChildClickListener(new ChildOnClickListener());
 
             return addProductExpandable;
         }
@@ -415,11 +438,13 @@ public class MainActivityFragment extends Fragment
             spinner.setAdapter(shopsAdapter);
 
             ImageButton addButton = (ImageButton) inputs.findViewById(R.id.add_product_button);
-            addButton.setOnClickListener(new View.OnClickListener() {
+            addButton.setOnClickListener(new View.OnClickListener()
+            {
 
 
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
                     View parent = (View) (v.getParent()).getParent();
 
                     String productItem = ((EditText) parent.findViewById(
@@ -433,6 +458,9 @@ public class MainActivityFragment extends Fragment
 
                     if (productItem.length() > 0)
                     {
+
+                        if (productItem.length() > 15)
+                            productItem = productItem.substring(0, 15);
                         double productPrice;
                         if (priceString.length() < 1)
                             productPrice = 0;

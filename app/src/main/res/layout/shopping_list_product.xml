@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="title"
-        android:maxLength="20"
+        android:maxLength="15"
         android:id="@+id/product_title_textView"
         android:paddingTop="@dimen/product_text_top_padding"
         android:layout_column="0"
