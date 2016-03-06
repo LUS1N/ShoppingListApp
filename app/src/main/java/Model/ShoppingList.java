@@ -130,6 +130,10 @@ public class ShoppingList
         addProduct(p);
     }
 
+    public boolean isEmpty()
+    {
+        return productsWithAmount.isEmpty();
+    }
     public Product getProduct(int index)
     {
         return productsWithAmount.get(index).first;

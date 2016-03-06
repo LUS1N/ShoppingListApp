@@ -94,8 +94,22 @@ public class MainActivityFragment extends Fragment
         @Override
         public void onClick(View v)
         {
-            Storage.getInstance().getShoppingLists().get(group).removeProduct(child);
+            // if it's last item the group will be expanded again because it collapses after
+            //removing a product from the list
+            boolean islast = false;
+            ShoppingList sl = Storage.getInstance().getShoppingLists().get(group);
+            if (sl.getAmountOfProduct(sl.getProduct(child)) == 1)
+            {
+                islast = true;
+            }
+            sl.removeProduct(child);
             ((BaseExpandableListAdapter) shoppingListView.getExpandableListAdapter()).notifyDataSetChanged();
+
+            // if it's empty dont expand
+            if (islast && !sl.isEmpty())
+            {
+                shoppingListView.expandGroup(group);
+            }
         }
     }
 
