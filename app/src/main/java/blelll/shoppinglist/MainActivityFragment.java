@@ -49,14 +49,14 @@ public class MainActivityFragment extends Fragment
         shoppingListView = (ExpandableListView) view.findViewById(
                 R.id.ShoppingListsExpandableListView);
 
-        setupAddShoppingListHeader(inflater, shoppingListView);
+        setupAddShoppingListHeader(inflater);
         setupAddListButtonListener(view);
-        setupShoppingListExpandableListAdapter(inflater, shoppingListView);
+        setupShoppingListExpandableListAdapter(inflater);
 
         return view;
     }
 
-    private void setupShoppingListExpandableListAdapter(LayoutInflater inflater, ExpandableListView shoppingListView)
+    private void setupShoppingListExpandableListAdapter(LayoutInflater inflater)
     {
         ExpandableListAdapter a = new ShoppingList_ExpandableListAdapter(inflater,
                 shoppingListView);
@@ -71,7 +71,7 @@ public class MainActivityFragment extends Fragment
         icon.setOnClickListener(new AddNewListListener());
     }
 
-    private void setupAddShoppingListHeader(LayoutInflater inflater, ExpandableListView shoppingListView)
+    private void setupAddShoppingListHeader(LayoutInflater inflater)
     {
         shoppingListView.addHeaderView(
                 inflater.inflate(R.layout.add_list_header, shoppingListView, false));
@@ -83,13 +83,11 @@ public class MainActivityFragment extends Fragment
     private class DecreaseProductAmountListener implements View.OnClickListener
     {
         int group, child;
-        ExpandableListView expandableListView;
 
-        public DecreaseProductAmountListener(int group, int child, ExpandableListView expandableListView)
+        public DecreaseProductAmountListener(int group, int child)
         {
             this.group = group;
             this.child = child;
-            this.expandableListView = expandableListView;
         }
 
 
@@ -97,7 +95,7 @@ public class MainActivityFragment extends Fragment
         public void onClick(View v)
         {
             Storage.getInstance().getShoppingLists().get(group).removeProduct(child);
-            ((BaseExpandableListAdapter) expandableListView.getExpandableListAdapter()).notifyDataSetChanged();
+            ((BaseExpandableListAdapter) shoppingListView.getExpandableListAdapter()).notifyDataSetChanged();
         }
     }
 
@@ -160,9 +158,6 @@ public class MainActivityFragment extends Fragment
             ((BaseExpandableListAdapter) ((ExpandableListView) parent).getExpandableListAdapter()).notifyDataSetChanged();
         }
     }
-
-
-
 
     private class ShoppingList_ExpandableListAdapter extends BaseExpandableListAdapter
     {
@@ -253,6 +248,9 @@ public class MainActivityFragment extends Fragment
 
             ImageButton decreaseButton = (ImageButton) productListView.findViewById(
                     R.id.product_decrease_amount_button);
+            decreaseButton.setOnClickListener(
+                    new DecreaseProductAmountListener(groupPosition, childPosition - 1));
+
 //            DecreaseProductAmountListener decreaseListener = new DecreaseProductAmountListener(
 //                    groupPosition, childPosition, ((ExpandableListView) productListView));
 
@@ -281,28 +279,28 @@ public class MainActivityFragment extends Fragment
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
         {
-            View shoppingListView = convertView;
+            View shoppingListGroupView = convertView;
 
-            if (shoppingListView == null)
-                shoppingListView = inflater.inflate(
+            if (shoppingListGroupView == null)
+                shoppingListGroupView = inflater.inflate(
                         R.layout.shopping_list_row, parent, false);
             ShoppingList current = (ShoppingList) getGroup(groupPosition);
 
             // set title
-            ((TextView) shoppingListView.findViewById(
+            ((TextView) shoppingListGroupView.findViewById(
                     R.id.title_textView)).setText(current.getTitle());
 
-            View removeButton = shoppingListView.findViewById(R.id.removeListButton);
+            View removeButton = shoppingListGroupView.findViewById(R.id.removeListButton);
             removeButton.setOnClickListener(new RemoveListListener(groupPosition));
 
             //set size
-            ((TextView) shoppingListView.findViewById(R.id.size_textView))
+            ((TextView) shoppingListGroupView.findViewById(R.id.size_textView))
                     .setText(
                             getString(R.string.shoppingList_size, // string with placeholders
                                     current.getSize(),
                                     current.getItemsAmount()));
 
-            return shoppingListView;
+            return shoppingListGroupView;
         }
 
         @Override
