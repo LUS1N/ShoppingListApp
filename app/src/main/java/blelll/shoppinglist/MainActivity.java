@@ -1,10 +1,14 @@
 package blelll.shoppinglist;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -45,9 +49,19 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.add_shop)
         {
-            return true;
+            DialogFragment dialog = new ShopDialogFragment();
+            dialog.show(getFragmentManager(), "NoticeDialogFragment");
+
+        }
+        else if (id == R.id.get_shops)
+        {
+            DialogFragment dialog = new ShopListDialogFragment();
+            dialog.show(getFragmentManager(),"NoticeDialogFragment");
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
 }

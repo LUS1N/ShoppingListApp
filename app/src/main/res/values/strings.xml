@@ -11,4 +11,10 @@
     <string name="plus_sign">Plus sign icon for adding</string>
     <string name="minus_sign">Minus sign icon for removing</string>
     <string name="add_product">Add product</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_shop_name">Enter Shop Name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
