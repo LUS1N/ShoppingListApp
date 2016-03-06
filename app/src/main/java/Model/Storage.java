@@ -121,7 +121,8 @@ public class Storage
 
         shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
         shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
-        shoppingLists.get(0).addProduct(new Product("Some other milk", "Milk", shops.get(0), 6));
+        shoppingLists.get(0).addProduct(
+                new Product("Some other milk abcde", "Milk", shops.get(0), 6));
         shoppingLists.get(0).addProduct(new Product("Beef meats", "meat", shops.get(0), 6));
 
     }

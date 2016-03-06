@@ -71,8 +71,8 @@ public class MainActivityFragment extends Fragment
 
     private void setupAddShoppingListHeader(LayoutInflater inflater, ExpandableListView shoppingListView)
     {
-        final View addListHeaderView = inflater.inflate(R.layout.add_list_header, null, false);
-        shoppingListView.addHeaderView(addListHeaderView);
+        shoppingListView.addHeaderView(
+                inflater.inflate(R.layout.add_list_header, shoppingListView, false));
         shoppingListView.setOnChildClickListener(new ProductOnClickListener());
     }
 
@@ -215,7 +215,7 @@ public class MainActivityFragment extends Fragment
 
             // set the text for the product view
             TextView titleTV = (TextView) productListView.findViewById(
-                    R.id.product_textView);
+                    R.id.product_title_textView);
             titleTV.setText(currentProduct.first.getTitle());
             return productListView;
         }
@@ -400,7 +400,7 @@ public class MainActivityFragment extends Fragment
 
                 @Override
                 public void onClick(View v) {
-                    View parent = (View) ((ViewGroup) v.getParent()).getParent();
+                    View parent = (View) (v.getParent()).getParent();
 
                     String productItem = ((EditText) parent.findViewById(
                             R.id.new_product_title)).getText().toString();
@@ -411,11 +411,10 @@ public class MainActivityFragment extends Fragment
                             R.id.new_product_price)).getText().toString();
 
 
-                    if (productItem != null && productItem.length() > 0) {
+                    if (productItem.length() > 0)
+                    {
                         double productPrice;
-                        if (productCategory == null)
-                            productCategory = "";
-                        if (priceString == null || priceString.length() < 1)
+                        if (priceString.length() < 1)
                             productPrice = 0;
                         else
                             productPrice = Double.parseDouble(priceString);
@@ -517,7 +516,6 @@ public class MainActivityFragment extends Fragment
         @Override
         public void onGroupExpanded(int groupPosition)
         {
-
         }
 
         @Override
