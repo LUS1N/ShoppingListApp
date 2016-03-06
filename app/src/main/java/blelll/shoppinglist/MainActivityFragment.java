@@ -204,6 +204,7 @@ public class MainActivityFragment extends Fragment
             {
                 productListView = inflater.inflate(
                         R.layout.shopping_list_product, parent, false);
+
             }
             else
                 productListView = convertView;
@@ -229,11 +230,12 @@ public class MainActivityFragment extends Fragment
                             currencyFormat.format(
                                     currentProduct.first.getNormalPrice() * currentProduct.second)
                     ));
-//
-//            ((TextView) (productListView.findViewById(
-//                    R.id.product_amount_and_buttons)).findViewById(
-//                    R.id.product_amount_textview)).setText(
-//                    currentProduct.second);
+
+            ((TextView) ((productListView.findViewById(R.id.product_amount_textview)))).setText(
+                    currentProduct.second + "");
+
+
+            
 
             return productListView;
         }

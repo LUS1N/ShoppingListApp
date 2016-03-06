@@ -18,4 +18,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="total_products_price">Total: %1$s</string>
+    <string name="reduce_amount">Reduce product amount</string>
+    <string name="increase_product">Increase product amount</string>
 </resources>
