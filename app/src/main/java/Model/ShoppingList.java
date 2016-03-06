@@ -124,10 +124,17 @@ public class ShoppingList
         removeProduct(p);
     }
 
+    public void addProduct(int index)
+    {
+        Product p = productsWithAmount.get(index).first;
+        addProduct(p);
+    }
+
     public Product getProduct(int index)
     {
         return productsWithAmount.get(index).first;
     }
+
     private Pair<Product, Integer> getProductAndAmount(Product product)
     {
         for (Pair<Product, Integer> pair : productsWithAmount)

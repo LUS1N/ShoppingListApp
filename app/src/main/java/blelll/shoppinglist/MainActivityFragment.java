@@ -100,16 +100,27 @@ public class MainActivityFragment extends Fragment
     }
 
     /**
-     * Listener for clicked products
+     * Listener for adding new products to selected list
      */
-    private class AddProductAmountListener implements View.OnClickListener
+    private class IncreaseProductAmountListener implements View.OnClickListener
     {
+        int group, child;
+
+        public IncreaseProductAmountListener(int group, int child)
+        {
+            this.group = group;
+            this.child = child;
+        }
+
+
         @Override
         public void onClick(View v)
         {
-
+            Storage.getInstance().getShoppingLists().get(group).addProduct(child);
+            ((BaseExpandableListAdapter) shoppingListView.getExpandableListAdapter()).notifyDataSetChanged();
         }
     }
+
 
     /**
      * Listener for adding new lists
@@ -250,6 +261,12 @@ public class MainActivityFragment extends Fragment
                     R.id.product_decrease_amount_button);
             decreaseButton.setOnClickListener(
                     new DecreaseProductAmountListener(groupPosition, childPosition - 1));
+
+            ImageButton increaseButton = (ImageButton) productListView.findViewById(
+                    R.id.product_increase_amount_button);
+
+            increaseButton.setOnClickListener(
+                    new IncreaseProductAmountListener(groupPosition, childPosition - 1));
 
 //            DecreaseProductAmountListener decreaseListener = new DecreaseProductAmountListener(
 //                    groupPosition, childPosition, ((ExpandableListView) productListView));
