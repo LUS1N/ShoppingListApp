@@ -15,9 +15,14 @@ public class Storage
         if (storage == null)
         {
             storage = new Storage();
-            storage.mockData();
+//            storage.mockData();
         }
         return storage;
+    }
+
+    public ArrayList<Product> getProducts()
+    {
+        return products;
     }
 
     private ArrayList<Product> products;
@@ -27,6 +32,8 @@ public class Storage
 
     public ShoppingList addShoppingList(ShoppingList shoppingList)
     {
+        if (shoppingLists.contains(shoppingList))
+            return shoppingLists.get(shoppingLists.indexOf(shoppingList));
         shoppingLists.add(shoppingList);
         return shoppingList;
     }
@@ -44,7 +51,8 @@ public class Storage
 
     public void removeShop(Shop shop)
     {
-        this.shops.remove(shop);
+        if (this.shops.contains(shop))
+            shops.remove(shops.indexOf(shop));
     }
 
     public ArrayList<Shop> getShops()
@@ -65,10 +73,11 @@ public class Storage
     }
 
     /**
-     * Adds a new product to the category, keeps values under each category unique
-     * returns added product
+     * Returns the identical product object to the the passed one, so no duplicates occur.
+     *
+     * Adds a new product to the list if it's not there and returns added product
      */
-    public Product addProduct(Product product)
+    public Product getProduct(Product product)
     {
         if (products.contains(product))
             return products.get(products.indexOf(product));
@@ -114,25 +123,25 @@ public class Storage
 
     public void addProductToShoppingList(ShoppingList sl, Product product, int amount)
     {
-        Product pro = addProduct(product);
+        Product pro = getProduct(product);
         sl.addProduct(pro, amount);
     }
 
     public void addProductToShoppingList(int index, Product product, int amount)
     {
-        Product pro = addProduct(product);
+        Product pro = getProduct(product);
         shoppingLists.get(index).addProduct(pro, amount);
     }
 
     public void addProductToShoppingList(ShoppingList sl, Product product)
     {
-        Product pro = addProduct(product);
+        Product pro = getProduct(product);
         sl.addProduct(pro);
     }
 
     public void addProductToShoppingList(int index, Product product)
     {
-        Product pro = addProduct(product);
+        Product pro = getProduct(product);
         shoppingLists.get(index).addProduct(pro);
     }
 
@@ -148,7 +157,7 @@ public class Storage
 
     public int getAmountOfProductInList(ShoppingList shoppingList, Product product)
     {
-        Product p = addProduct(product);
+        Product p = getProduct(product);
         return shoppingList.getAmountOfProduct(p);
     }
 }

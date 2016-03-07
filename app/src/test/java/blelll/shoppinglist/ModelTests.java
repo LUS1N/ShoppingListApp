@@ -33,13 +33,13 @@ public class ModelTests
         storage.addShop(bilka);
         Product p1 = new Product("Milk 3,5", bilka, 6);
 
-        storage.addProduct(p1);
-        storage.addProduct(p1);
-        storage.addProduct(new Product("Arla", bilka, 7));
-        storage.addProduct(new Product("LURPAK", bilka, 20));
-        storage.addProduct(new Product("Chicken factory", bilka, 22));
-        storage.addProduct(new Product("Eggnog factory", bilka, 100));
-        storage.addProduct(new Product("Salad factory", bilka, 16));
+        storage.getProduct(p1);
+        storage.getProduct(p1);
+        storage.getProduct(new Product("Arla", bilka, 7));
+        storage.getProduct(new Product("LURPAK", bilka, 20));
+        storage.getProduct(new Product("Chicken factory", bilka, 22));
+        storage.getProduct(new Product("Eggnog factory", bilka, 100));
+        storage.getProduct(new Product("Salad factory", bilka, 16));
     }
 
     @Test
@@ -51,8 +51,8 @@ public class ModelTests
     @Test
     public void testAdd_Product_returns_same_product_from_list()
     {
-        Product p = storage.addProduct(new Product("Milk", new Shop("Bilka"), 5));
-        Product b = storage.addProduct(new Product("Milk", new Shop("Bilka"), 5));
+        Product p = storage.getProduct(new Product("Milk", new Shop("Bilka"), 5));
+        Product b = storage.getProduct(new Product("Milk", new Shop("Bilka"), 5));
         assertEquals(p, b);
     }
 

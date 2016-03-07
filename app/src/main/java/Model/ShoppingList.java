@@ -174,6 +174,25 @@ public class ShoppingList
         return null;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof ShoppingList)) return false;
+
+        ShoppingList that = (ShoppingList) o;
+
+        for (Pair<Product, Integer> pair : productsWithAmount)
+        {
+            if (!((ShoppingList) o).productsWithAmount.contains(pair))
+                return false;
+        }
+
+        return !(getTitle() != null ? !getTitle().equals(
+                that.getTitle()) : that.getTitle() != null);
+
+    }
+
     public boolean contains(Product product)
     {
         for (Pair<Product, Integer> pair : productsWithAmount)
@@ -183,4 +202,6 @@ public class ShoppingList
         }
         return false;
     }
+
+
 }
