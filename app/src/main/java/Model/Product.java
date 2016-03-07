@@ -60,6 +60,12 @@ public class Product
         return shop;
     }
 
-
-
+    @Override
+    public String toString()
+    {
+        return "Product" +
+                " " + title + '\'' +
+                ", " + shop +
+                ", " + price;
+    }
 }

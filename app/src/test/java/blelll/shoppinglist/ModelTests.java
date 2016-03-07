@@ -73,8 +73,16 @@ public class ModelTests
         assertTrue(sl1.getAmountOfProduct(p1) == sl2.getAmountOfProduct(p1));
         storage.addProductToShoppingList(sl1, p1);
         assertTrue(sl1.getAmountOfProduct(p1) == 2);
+    }
 
-
+    @Test
+    public void test_add_product_to_list_with_amount()
+    {
+        storage.addProductToShoppingList(shoppingList, new Product("Meat", new Shop("Bilka"), 20),
+                5);
+        assertTrue(
+                storage.getAmountOfProductInList(shoppingList,
+                        new Product("Meat", new Shop("Bilka"), 20)) == 5);
     }
 
     @Test

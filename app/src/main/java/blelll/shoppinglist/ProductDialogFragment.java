@@ -77,6 +77,9 @@ public class ProductDialogFragment extends DialogFragment
                         double priceDouble = priceString.isEmpty() ? 0.0 : Double.parseDouble(
                                 priceString);
 
+                        String amountString = ((EditText) shopDialogView.findViewById(
+                                R.id.new_product_amount_editText)).getText().toString();
+                        int amount = amountString.isEmpty() ? 1 : Integer.parseInt(amountString);
 
                         Spinner shop = (Spinner) shopDialogView.findViewById(R.id.shop_spinner);
                         String shopString = shop.getSelectedItem().toString();
@@ -86,7 +89,7 @@ public class ProductDialogFragment extends DialogFragment
                             Storage storage = Storage.getInstance();
                             storage.addProductToShoppingList(group,
                                     new Product(titleString, storage.getShop(shopString),
-                                            priceDouble));
+                                            priceDouble), amount);
 
                             baseExpandableListAdapter.notifyDataSetChanged();
                             expandableListView.expandGroup(group);

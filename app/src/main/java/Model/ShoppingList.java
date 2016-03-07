@@ -56,6 +56,19 @@ public class ShoppingList
         addOrRemoveProduct(product, 1);
     }
 
+    protected void addProduct(Product product, int amount)
+    {
+        for (Pair<Product, Integer> pair : productsWithAmount)
+        {
+            if (pair.first.equals(product))
+            {
+                pair.second += amount;
+                return;
+            }
+        }
+        productsWithAmount.add(new Pair<>(product, amount));
+    }
+
     protected void removeProduct(Product product)
     {
         addOrRemoveProduct(product, -1);
@@ -111,8 +124,7 @@ public class ShoppingList
     {
         for (Pair<Product, Integer> pair : productsWithAmount)
         {
-            Product prod = pair.first;
-            if (prod.equals(product))
+            if (pair.first.equals(product))
                 return pair.second;
         }
         return 0;

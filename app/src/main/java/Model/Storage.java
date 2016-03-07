@@ -112,6 +112,18 @@ public class Storage
         return shop;
     }
 
+    public void addProductToShoppingList(ShoppingList sl, Product product, int amount)
+    {
+        Product pro = addProduct(product);
+        sl.addProduct(pro, amount);
+    }
+
+    public void addProductToShoppingList(int index, Product product, int amount)
+    {
+        Product pro = addProduct(product);
+        shoppingLists.get(index).addProduct(pro, amount);
+    }
+
     public void addProductToShoppingList(ShoppingList sl, Product product)
     {
         Product pro = addProduct(product);
@@ -132,5 +144,11 @@ public class Storage
     public void removeProductFromShoppingList(int SLindex, int prodIndx)
     {
         shoppingLists.get(SLindex).removeProduct(prodIndx);
+    }
+
+    public int getAmountOfProductInList(ShoppingList shoppingList, Product product)
+    {
+        Product p = addProduct(product);
+        return shoppingList.getAmountOfProduct(p);
     }
 }
