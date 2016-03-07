@@ -6,15 +6,6 @@
               android:id="@+id/new_product_inputs_layout">
 
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/circle_icon_height"
-        android:id="@+id/add_product_button"
-        android:src="@drawable/ic_add_circle_outline_24dp"
-        android:background="#00ffffff"
-        android:contentDescription="@string/plus_sign"
-        android:layout_gravity="center"/>
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
