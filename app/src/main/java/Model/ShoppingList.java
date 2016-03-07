@@ -10,12 +10,25 @@ public class ShoppingList
     private ArrayList<Pair<Product, Integer>> productsWithAmount;
     private String title;
 
+
     @Override
     public String toString()
     {
         return "ShoppingList " + title + " size: " + productsWithAmount.size();
     }
 
+
+    public double getTotalPrice()
+    {
+        double total = 0;
+
+        for (Pair<Product, Integer> pair : productsWithAmount)
+        {
+            total += pair.first.getPrice() * pair.second;
+        }
+
+        return total;
+    }
     public ShoppingList(String title)
     {
         productsWithAmount = new ArrayList<>();

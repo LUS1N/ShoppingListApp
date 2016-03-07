@@ -35,11 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingLeft="@dimen/product_price_left_padding"
-        android:maxLength="12"
-        android:id="@+id/total_price_textView"
-        android:layout_column="2"
-        android:layout_columnWeight="1"/>
+        android:id="@+id/product_shop_textView"/>
 
     <LinearLayout
         android:orientation="horizontal"

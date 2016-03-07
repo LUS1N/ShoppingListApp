@@ -29,7 +29,7 @@ import Model.Storage;
  */
 public class MainActivityFragment extends Fragment
 {
-
+    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
     ExpandableListView shoppingListView;
     public MainActivityFragment()
     {
@@ -252,16 +252,15 @@ public class MainActivityFragment extends Fragment
                     setText(
                             currentProduct.first.getTitle());
 
+            // display the shop
+            ((TextView) productListView.findViewById(R.id.product_shop_textView)).setText(
+                    currentProduct.first.getShop().getTitle());
+
+
             // add prices formatted as a money format from current locale
-            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
             ((TextView) productListView.findViewById(R.id.product_price_textView)).setText(
                     currencyFormat.format(currentProduct.first.getPrice()));
 
-            ((TextView) productListView.findViewById(R.id.total_price_textView)).setText(
-                    getString(R.string.total_products_price,
-                            currencyFormat.format(
-                                    currentProduct.first.getPrice() * currentProduct.second)
-                    ));
 
             ((TextView) ((productListView.findViewById(R.id.product_amount_textview)))).setText(
                     currentProduct.second + "");
@@ -326,7 +325,8 @@ public class MainActivityFragment extends Fragment
                     .setText(
                             getString(R.string.shoppingList_size, // string with placeholders
                                     current.getSize(),
-                                    current.getItemsAmount()));
+                                    current.getItemsAmount(),
+                                    currencyFormat.format(current.getTotalPrice())));
 
             return shoppingListGroupView;
         }

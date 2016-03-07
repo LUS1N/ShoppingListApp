@@ -3,7 +3,7 @@
     <string name="add_shop">Add Shop</string>
     <string name="get_shops">Get Shop List</string>
     <string name="shoppingList_title">Shopping list title</string>
-    <string name="shoppingList_size">Unique items: %1$d, total: %2$d</string>
+    <string name="shoppingList_size">Unique items: %1$d, total: %2$d, total price: %3$s</string>
     <string name="add_new_list">Add new list</string>
     <string name="product_title">Item</string>
     <string name="product_category">Category</string>
@@ -16,8 +16,6 @@
     <string name="enter_shop_name">Enter Shop Name</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="total_products_price">Total: %1$s</string>
     <string name="reduce_amount">Reduce product amount</string>
     <string name="increase_product">Increase product amount</string>
     <string name="amount">Amount</string>
