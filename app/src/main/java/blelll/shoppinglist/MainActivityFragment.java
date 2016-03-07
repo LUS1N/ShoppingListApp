@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import Model.Pair;
 import Model.Product;
+import Model.Shop;
 import Model.ShoppingList;
 import Model.Storage;
 
@@ -253,8 +254,12 @@ public class MainActivityFragment extends Fragment
                             currentProduct.first.getTitle());
 
             // display the shop
+            Shop currShop = currentProduct.first.getShop();
+
+            String shop = currShop == null ? "" : currShop.getTitle();
             ((TextView) productListView.findViewById(R.id.product_shop_textView)).setText(
-                    currentProduct.first.getShop().getTitle());
+                    shop
+            );
 
 
             // add prices formatted as a money format from current locale
