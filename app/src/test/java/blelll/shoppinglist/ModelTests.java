@@ -164,6 +164,5 @@ public class ModelTests
                 new Product("Dansk milk", new Shop("Bilka"), 6));
         assertTrue(shoppingList.getItemsAmount() == 3);
         assertTrue(shoppingList.getSize() == 2);
-
     }
 }

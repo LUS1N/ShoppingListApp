@@ -1,7 +1,7 @@
 package Model;
 
 /**
- * Created by L on 3/2/2016.
+ *  Generic pair type
  */
 public class Pair<F, S>
 {

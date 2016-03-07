@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,8 +25,6 @@ public class MainActivity extends AppCompatActivity
     private static final String SHOPS = "Shops";
     private static final String DEFAULT = "";
     public static final String TAG = "BB";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity
         prefsEditor.putString(SHOPPINGLISTS, shoppingListsJSON);
         prefsEditor.putString(SHOPS, shopsJSON);
         prefsEditor.commit();
-        Log.w(TAG, shoppingListsJSON + "blela");
     }
 
     private void clearPrefs(SharedPreferences.Editor prefsEditor)
@@ -118,8 +114,6 @@ public class MainActivity extends AppCompatActivity
         Shop[] shops = gson.fromJson(shopsJSON, Shop[].class);
 
         importValuesToStorage(products, shoppingLists, shops);
-
-
     }
 
     private void importValuesToStorage(Product[] products, ShoppingList[] shoppingLists, Shop[] shops)
@@ -141,14 +135,6 @@ public class MainActivity extends AppCompatActivity
             {
                 storage.addShop(shop);
             }
-    }
-
-    private void logObjects(Object[] objects)
-    {
-        for (Object obj : objects)
-        {
-            Log.w(TAG, obj.toString());
-        }
     }
 
     @Override

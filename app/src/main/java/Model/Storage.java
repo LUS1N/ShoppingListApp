@@ -1,5 +1,7 @@
 package Model;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,7 +17,9 @@ public class Storage
         if (storage == null)
         {
             storage = new Storage();
-//            storage.mockData();
+
+            // uncomment to add mocked data, it will be added everytime the program runs though
+            // storage.mockData();
         }
         return storage;
     }
@@ -36,11 +40,6 @@ public class Storage
             return shoppingLists.get(shoppingLists.indexOf(shoppingList));
         shoppingLists.add(shoppingList);
         return shoppingList;
-    }
-
-    public void removeShoppingList(ShoppingList sl)
-    {
-        shoppingLists.remove(sl);
     }
 
     public void addShop(Shop shop)
@@ -86,7 +85,6 @@ public class Storage
         return product;
     }
 
-
     public void mockData()
     {
         for (Shop shop : new ArrayList<>(
@@ -106,6 +104,11 @@ public class Storage
         addProductToShoppingList(0, new Product("Some other milk", shops.get(0), 6));
         addProductToShoppingList(0, new Product("Beef meats", shops.get(0), 6));
 
+        Gson gson = new Gson();
+        String productsJSON = gson.toJson(storage.getProducts().toArray());
+        String shoppingListsJSON = gson.toJson(storage.getShoppingLists().toArray());
+        String shopsJSON = gson.toJson(storage.getShops().toArray());
+        System.out.println(productsJSON);
     }
 
     public Shop getShop(String shopName)
@@ -148,11 +151,6 @@ public class Storage
     public void removeProductFromShoppingList(ShoppingList shoppingList, Product product)
     {
         shoppingList.removeProduct(product);
-    }
-
-    public void removeProductFromShoppingList(int SLindex, int prodIndx)
-    {
-        shoppingLists.get(SLindex).removeProduct(prodIndx);
     }
 
     public int getAmountOfProductInList(ShoppingList shoppingList, Product product)

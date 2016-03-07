@@ -8,7 +8,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,12 +17,13 @@ import Model.Storage;
 /**
  * Created by Andy on 05/03/2016.
  */
-public class ShopListDialogFragment extends DialogFragment {
-
+public class ShopListDialogFragment extends DialogFragment
+{
 
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
@@ -34,18 +34,26 @@ public class ShopListDialogFragment extends DialogFragment {
 
         ArrayList<Shop> shops = Storage.getInstance().getShops();
         final ArrayList<String> shopsName = new ArrayList<>();
-        for(Shop shop :shops)
+        for (Shop shop : shops)
+        {
             shopsName.add(shop.toString());
+        }
 
         builder.setTitle(R.string.get_shops)
-                .setItems(shopsName.toArray(new String[shopsName.size()]), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Shop removedShop = Storage.getInstance().getShop(shopsName.get(which));
-                               Storage.getInstance().removeShop(removedShop);
+                .setItems(shopsName.toArray(new String[shopsName.size()]),
+                        new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                Shop removedShop = Storage.getInstance().getShop(
+                                        shopsName.get(which));
+                                Storage.getInstance().removeShop(removedShop);
                             }
                         })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int id)
+                    {
                         ShopListDialogFragment.this.getDialog().cancel();
                     }
                 });

@@ -10,14 +10,6 @@ public class ShoppingList
     private ArrayList<Pair<Product, Integer>> productsWithAmount;
     private String title;
 
-
-    @Override
-    public String toString()
-    {
-        return "ShoppingList " + title + " size: " + productsWithAmount.size();
-    }
-
-
     public double getTotalPrice()
     {
         double total = 0;
@@ -64,6 +56,9 @@ public class ShoppingList
         return productsWithAmount;
     }
 
+    /**
+     * To be used through storage
+     */
     protected void addProduct(Product product)
     {
         addOrRemoveProduct(product, 1);
@@ -119,18 +114,9 @@ public class ShoppingList
         }
     }
 
-
-    @Override
-    public int hashCode()
-    {
-        int result = productsWithAmount.hashCode();
-        result = 31 * result + getTitle().hashCode();
-        return result;
-    }
-
     private void throwException()
     {
-        throw new RuntimeException("Can't remove product with amount 0");
+        throw new RuntimeException("No such product in list");
     }
 
     public int getAmountOfProduct(Product product)
@@ -159,6 +145,7 @@ public class ShoppingList
     {
         return productsWithAmount.isEmpty();
     }
+
     public Product getProduct(int index)
     {
         return productsWithAmount.get(index).first;
@@ -203,5 +190,17 @@ public class ShoppingList
         return false;
     }
 
+    @Override
+    public String toString()
+    {
+        return "ShoppingList " + title + " size: " + productsWithAmount.size();
+    }
 
+    @Override
+    public int hashCode()
+    {
+        int result = productsWithAmount.hashCode();
+        result = 31 * result + getTitle().hashCode();
+        return result;
+    }
 }

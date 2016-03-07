@@ -180,6 +180,9 @@ public class MainActivityFragment extends Fragment
         }
     }
 
+    /**
+     * Adapter to the expandable list
+     */
     private class ShoppingList_ExpandableListAdapter extends BaseExpandableListAdapter
     {
         /* extra 'child' is added as the header, so some index manipulation is in tact */
@@ -242,6 +245,12 @@ public class MainActivityFragment extends Fragment
             else
                 productListView = convertView;
 
+            return setupFieldsAndListeners(groupPosition, childPosition, productListView);
+        }
+
+        @NonNull
+        private View setupFieldsAndListeners(int groupPosition, int childPosition, View productListView)
+        {
             ShoppingList currentSL = (ShoppingList) getGroup(groupPosition);
 
             // take away 1 to access the real index

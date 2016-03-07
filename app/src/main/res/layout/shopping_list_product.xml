@@ -17,7 +17,7 @@
         android:id="@+id/product_title_textView"
         android:paddingTop="@dimen/product_text_top_padding"
         android:layout_column="0"
-        />
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,14 +29,15 @@
         android:maxLength="5"
         android:paddingTop="@dimen/product_text_top_padding"
         android:layout_column="1"
-        />
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/product_shop_textView"
-        android:layout_column="2"/>
+        android:layout_column="2"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
     <LinearLayout
         android:orientation="horizontal"
