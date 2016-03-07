@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by L on 3/1/2016.
@@ -14,7 +15,7 @@ public class Storage
         if (storage == null)
         {
             storage = new Storage();
-//            storage.mockData();
+            storage.mockData();
         }
         return storage;
     }
@@ -77,21 +78,26 @@ public class Storage
     }
 
 
-//    public void mockData()
-//    {
-//        shops.addAll(new ArrayList<>(
-//                Arrays.asList(new Shop("Fakta"), new Shop("Netto"), new Shop("Bilka"))));
-//
-//        shoppingLists.addAll(new ArrayList<>(
-//                Arrays.asList(new ShoppingList("Breakfast"), new ShoppingList("Sunday"))));
-//
-//        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
-//        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
-//        shoppingLists.get(0).addProduct(
-//                new Product("Some other milk", "Milk", shops.get(0), 6));
-//        shoppingLists.get(0).addProduct(new Product("Beef meats", "meat", shops.get(0), 6));
-//
-//    }
+    public void mockData()
+    {
+        for (Shop shop : new ArrayList<>(
+                Arrays.asList(new Shop("Fakta"), new Shop("Netto"), new Shop("Bilka"))))
+        {
+            addShop(shop);
+        }
+
+        for (ShoppingList shoppingList : new ArrayList<>(
+                Arrays.asList(new ShoppingList("Breakfast"), new ShoppingList("Sunday"))))
+        {
+            addShoppingList(shoppingList);
+        }
+
+        addProductToShoppingList(0, new Product("Arla", shops.get(0), 6));
+        addProductToShoppingList(0, new Product("Arla", shops.get(0), 6));
+        addProductToShoppingList(0, new Product("Some other milk", shops.get(0), 6));
+        addProductToShoppingList(0, new Product("Beef meats", shops.get(0), 6));
+
+    }
 
     public Shop getShop(String shopName)
     {
