@@ -82,7 +82,10 @@ public class ProductDialogFragment extends DialogFragment
                         int amount = amountString.isEmpty() ? 1 : Integer.parseInt(amountString);
 
                         Spinner shop = (Spinner) shopDialogView.findViewById(R.id.shop_spinner);
-                        String shopString = shop.getSelectedItem().toString();
+                        String shopString = "";
+                        
+                        if (shop.getSelectedItem() != null)
+                            shopString = shop.getSelectedItem().toString();
 
                         if (!titleString.isEmpty())
                         {
