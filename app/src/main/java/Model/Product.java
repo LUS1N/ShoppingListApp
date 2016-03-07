@@ -6,59 +6,21 @@ package Model;
 public class Product
 {
     private String title;
-    private String category;
     private Shop shop;
-    private double normalPrice;
+    private double price;
 
-
-    public Product(String title, String category, Shop shop, double normalPrice)
+    public Product(String title, Shop shop, double price)
     {
         this.title = title;
-        this.category = category;
         this.shop = shop;
-        this.normalPrice = normalPrice;
+        this.price = price;
     }
 
-
-    public String getCategory()
+    public double getPrice()
     {
-        return category;
+        return price;
     }
 
-    public void setCategory(String category)
-    {
-        this.category = category;
-    }
-
-    public String getTitle()
-    {
-        return title;
-    }
-
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
-
-    public Shop getShop()
-    {
-        return shop;
-    }
-
-    public void setShop(Shop shop)
-    {
-        this.shop = shop;
-    }
-
-    public double getNormalPrice()
-    {
-        return normalPrice;
-    }
-
-    public void setNormalPrice(double normalPrice)
-    {
-        this.normalPrice = normalPrice;
-    }
 
     @Override
     public boolean equals(Object o)
@@ -68,12 +30,8 @@ public class Product
 
         Product product = (Product) o;
 
-        if (Double.compare(product.getNormalPrice(), getNormalPrice()) != 0) return false;
-        if (getTitle() != null ? !getTitle().equals(
-                product.getTitle()) : product.getTitle() != null)
-            return false;
-        if (getCategory() != null ? !getCategory().equals(
-                product.getCategory()) : product.getCategory() != null) return false;
+        if (Double.compare(product.getPrice(), getPrice()) != 0) return false;
+        if (!getTitle().equals(product.getTitle())) return false;
         return !(getShop() != null ? !getShop().equals(
                 product.getShop()) : product.getShop() != null);
 
@@ -85,19 +43,23 @@ public class Product
         int result;
         long temp;
         result = getTitle().hashCode();
-        temp = Double.doubleToLongBits(getNormalPrice());
+        result = 31 * result + (getShop() != null ? getShop().hashCode() : 0);
+        temp = Double.doubleToLongBits(getPrice());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
-    @Override
-    public String toString()
+    public String getTitle()
     {
-        return "Product{" +
-                "title='" + title + '\'' +
-                ", category='" + category + '\'' +
-                ", shop=" + shop +
-                ", normalPrice=" + normalPrice +
-                '}';
+        return title;
     }
+
+
+    public Shop getShop()
+    {
+        return shop;
+    }
+
+
+
 }

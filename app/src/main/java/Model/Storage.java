@@ -1,9 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Created by L on 3/1/2016.
@@ -17,30 +14,16 @@ public class Storage
         if (storage == null)
         {
             storage = new Storage();
-            storage.mockData();
+//            storage.mockData();
         }
         return storage;
     }
 
-    private HashMap<String, ArrayList<Product>> products;
+    private ArrayList<Product> products;
     private ArrayList<Shop> shops;
     private ArrayList<ShoppingList> shoppingLists;
 
 
-    /**
-     * Returns all categories that contain the @cat string
-     */
-    public ArrayList<String> getPossibleCategories(String cat)
-    {
-        ArrayList<String> possible = new ArrayList<>();
-
-        for (String category : getCategories())
-        {
-            if (category.contains(cat.toUpperCase()))
-                possible.add(category);
-        }
-        return possible;
-    }
     public void addShoppingList(ShoppingList shoppingList)
     {
         shoppingLists.add(shoppingList);
@@ -74,58 +57,40 @@ public class Storage
 
     private Storage()
     {
-        this.products = new HashMap<>();
+        this.products = new ArrayList<>();
         this.shops = new ArrayList<>();
         this.shoppingLists = new ArrayList<>();
     }
 
     /**
      * Adds a new product to the category, keeps values under each category unique
+     * returns added product
      */
-    public void addProduct(Product product)
+    public Product addProduct(Product product)
     {
-        String category = product.getCategory().toUpperCase();
-
-        // if there's not key with category add new list to the map
-        if (!products.containsKey(category))
-            products.put(category, new ArrayList<Product>());
-
-        // add it to the list only if there are no duplicate items
-        ArrayList<Product> prods = this.products.get(category);
-        if (!prods.contains(product))
-            prods.add(product);
+        if (products.contains(product))
+            return products.get(products.indexOf(product));
+        else
+            products.add(product);
+        return product;
     }
 
-    public ArrayList<Product> getCategoryProducts(String category)
-    {
-        category = category.toUpperCase();
-        if (!getCategories().contains(category))
-        {
-            throw new RuntimeException("No such category.");
-        }
-        return this.products.get(category);
-    }
 
-    public Set<String> getCategories()
-    {
-        return this.products.keySet();
-    }
-
-    public void mockData()
-    {
-        shops.addAll(new ArrayList<>(
-                Arrays.asList(new Shop("Fakta"), new Shop("Netto"), new Shop("Bilka"))));
-
-        shoppingLists.addAll(new ArrayList<>(
-                Arrays.asList(new ShoppingList("Breakfast"), new ShoppingList("Sunday"))));
-
-        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
-        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
-        shoppingLists.get(0).addProduct(
-                new Product("Some other milk", "Milk", shops.get(0), 6));
-        shoppingLists.get(0).addProduct(new Product("Beef meats", "meat", shops.get(0), 6));
-
-    }
+//    public void mockData()
+//    {
+//        shops.addAll(new ArrayList<>(
+//                Arrays.asList(new Shop("Fakta"), new Shop("Netto"), new Shop("Bilka"))));
+//
+//        shoppingLists.addAll(new ArrayList<>(
+//                Arrays.asList(new ShoppingList("Breakfast"), new ShoppingList("Sunday"))));
+//
+//        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
+//        shoppingLists.get(0).addProduct(new Product("Arla", "Milk", shops.get(0), 6));
+//        shoppingLists.get(0).addProduct(
+//                new Product("Some other milk", "Milk", shops.get(0), 6));
+//        shoppingLists.get(0).addProduct(new Product("Beef meats", "meat", shops.get(0), 6));
+//
+//    }
 
     public Shop getShop(String shopName)
     {
@@ -138,5 +103,11 @@ public class Storage
         Shop shop = new Shop(shopName);
         shops.add(shop);
         return shop;
+    }
+
+    public void addProductToShoppingList(ShoppingList sl, Product product)
+    {
+        Product pro = addProduct(product);
+        sl.addProduct(pro);
     }
 }

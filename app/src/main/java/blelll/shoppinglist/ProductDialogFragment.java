@@ -85,7 +85,7 @@ public class ProductDialogFragment extends DialogFragment
                         {
                             Storage storage = Storage.getInstance();
                             storage.getShoppingLists().get(group).addProduct(
-                                    new Product(titleString, null, storage.getShop(shopString),
+                                    new Product(titleString, storage.getShop(shopString),
                                             priceDouble));
 
                             baseExpandableListAdapter.notifyDataSetChanged();

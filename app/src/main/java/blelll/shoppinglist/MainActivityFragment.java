@@ -255,12 +255,12 @@ public class MainActivityFragment extends Fragment
             // add prices formatted as a money format from current locale
             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
             ((TextView) productListView.findViewById(R.id.product_price_textView)).setText(
-                    currencyFormat.format(currentProduct.first.getNormalPrice()));
+                    currencyFormat.format(currentProduct.first.getPrice()));
 
             ((TextView) productListView.findViewById(R.id.total_price_textView)).setText(
                     getString(R.string.total_products_price,
                             currencyFormat.format(
-                                    currentProduct.first.getNormalPrice() * currentProduct.second)
+                                    currentProduct.first.getPrice() * currentProduct.second)
                     ));
 
             ((TextView) ((productListView.findViewById(R.id.product_amount_textview)))).setText(
