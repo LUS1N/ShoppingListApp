@@ -24,9 +24,10 @@ public class Storage
     private ArrayList<ShoppingList> shoppingLists;
 
 
-    public void addShoppingList(ShoppingList shoppingList)
+    public ShoppingList addShoppingList(ShoppingList shoppingList)
     {
         shoppingLists.add(shoppingList);
+        return shoppingList;
     }
 
     public void removeShoppingList(ShoppingList sl)
@@ -109,5 +110,21 @@ public class Storage
     {
         Product pro = addProduct(product);
         sl.addProduct(pro);
+    }
+
+    public void addProductToShoppingList(int index, Product product)
+    {
+        Product pro = addProduct(product);
+        shoppingLists.get(index).addProduct(pro);
+    }
+
+    public void removeProductFromShoppingList(ShoppingList shoppingList, Product product)
+    {
+        shoppingList.removeProduct(product);
+    }
+
+    public void removeProductFromShoppingList(int SLindex, int prodIndx)
+    {
+        shoppingLists.get(SLindex).removeProduct(prodIndx);
     }
 }

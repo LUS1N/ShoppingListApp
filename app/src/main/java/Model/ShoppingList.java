@@ -51,12 +51,12 @@ public class ShoppingList
         return productsWithAmount;
     }
 
-    public void addProduct(Product product)
+    protected void addProduct(Product product)
     {
         addOrRemoveProduct(product, 1);
     }
 
-    public void removeProduct(Product product)
+    protected void removeProduct(Product product)
     {
         addOrRemoveProduct(product, -1);
     }

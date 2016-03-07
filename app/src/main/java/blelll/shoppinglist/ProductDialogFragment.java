@@ -84,7 +84,7 @@ public class ProductDialogFragment extends DialogFragment
                         if (!titleString.isEmpty())
                         {
                             Storage storage = Storage.getInstance();
-                            storage.getShoppingLists().get(group).addProduct(
+                            storage.addProductToShoppingList(group,
                                     new Product(titleString, storage.getShop(shopString),
                                             priceDouble));
 
