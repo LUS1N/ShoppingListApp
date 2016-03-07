@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.Spinner;
 
 import Model.Product;
@@ -23,6 +24,12 @@ public class ProductDialogFragment extends DialogFragment
 {
     private int group;
     private BaseExpandableListAdapter baseExpandableListAdapter;
+    private ExpandableListView expandableListView;
+
+    public void setExpandableListView(ExpandableListView expandableListView)
+    {
+        this.expandableListView = expandableListView;
+    }
 
     public void setBaseExpandableListAdapter(BaseExpandableListAdapter baseExpandableListAdapter)
     {
@@ -82,6 +89,8 @@ public class ProductDialogFragment extends DialogFragment
                                             priceDouble));
 
                             baseExpandableListAdapter.notifyDataSetChanged();
+                            expandableListView.expandGroup(group);
+
                         }
                     }
                 })
@@ -94,6 +103,6 @@ public class ProductDialogFragment extends DialogFragment
                 });
 
 
-        return super.onCreateDialog(savedInstanceState);
+        return builder.create();
     }
 }

@@ -9,14 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 
 import Model.Pair;
 import Model.Product;
-import Model.Shop;
 import Model.ShoppingList;
 import Model.Storage;
 
@@ -285,7 +281,7 @@ public class MainActivityFragment extends Fragment
         }
 
         @NonNull
-        private View setupHeader(final int group, ViewGroup parent)
+        private View setupHeader(final int group, final ViewGroup parent)
         {
             View view = inflater.inflate(R.layout.add_product_header, parent, false);
             final ExpandableListView parentView = (ExpandableListView) parent;
@@ -298,6 +294,7 @@ public class MainActivityFragment extends Fragment
                     productDialogFragment.setGroup(group);
                     productDialogFragment.setBaseExpandableListAdapter((BaseExpandableListAdapter)
                             parentView.getExpandableListAdapter());
+                    productDialogFragment.setExpandableListView(parentView);
 
                     productDialogFragment.show(getActivity().getFragmentManager(), "");
                 }
@@ -433,211 +430,6 @@ public class MainActivityFragment extends Fragment
         }
     }
 
-    private class Product_ExpandableListAdapter extends BaseExpandableListAdapter
-    {
-        final int groups = 1;
-        final int children = 1;
-        private LayoutInflater inflater;
-        int outterGroup;
-        AddProductExpandable addProductExpandable;
-
-        public Product_ExpandableListAdapter(AddProductExpandable addProductExpandable, int outterGroup, LayoutInflater inflater)
-        {
-            this.inflater = inflater;
-            this.outterGroup = outterGroup;
-            this.addProductExpandable = addProductExpandable;
-        }
-
-        @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
-        {
-            convertView = inflater.inflate(R.layout.add_product_header, parent, false);
-            return convertView;
-        }
-
-        @Override
-        public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
-        {
-            View inputs = (inflater.inflate(R.layout.add_product_inputs, parent, false));
-            final Spinner spinner = (Spinner) inputs.findViewById(R.id.shop_spinner);
-
-            ArrayAdapter<Shop> shopsAdapter = new ArrayAdapter<>(getContext(),
-                    R.layout.support_simple_spinner_dropdown_item,
-                    Storage.getInstance().getShops());
-            spinner.setAdapter(shopsAdapter);
-
-            ImageButton addButton = (ImageButton) inputs.findViewById(R.id.add_product_button);
-            addButton.setOnClickListener(new View.OnClickListener()
-            {
-
-
-                @Override
-                public void onClick(View v)
-                {
-                    View parent = (View) (v.getParent()).getParent();
-
-                    String productItem = ((EditText) parent.findViewById(
-                            R.id.new_product_title)).getText().toString();
-                    String productCategory = ((EditText) parent.findViewById(
-                            R.id.new_product_category)).getText().toString();
-
-                    String priceString = ((EditText) parent.findViewById(
-                            R.id.new_product_price)).getText().toString();
-
-
-                    if (productItem.length() > 0)
-                    {
-
-                        if (productItem.length() > 15)
-                            productItem = productItem.substring(0, 15);
-                        double productPrice;
-                        if (priceString.length() < 1)
-                            productPrice = 0;
-                        else
-                            productPrice = Double.parseDouble(priceString);
-
-                        Product pro = new Product(productItem, productCategory,
-                                new Shop(spinner.getSelectedItem().toString()), productPrice);
-                        Storage.getInstance().addProduct(pro);
-                        Storage.getInstance().getShoppingLists().get(outterGroup).addProduct(pro);
-                        addProductExpandable.collapseGroup(groupPosition);
-
-                        // collapse and expand to refresh the list
-                        ExpandableListView expandableListView = ((ExpandableListView) addProductExpandable.getParent());
-                        expandableListView.collapseGroup(outterGroup);
-                        expandableListView.expandGroup(outterGroup);
-
-                        addProductExpandable.refreshDrawableState();
-
-                        hideKeyboard(addProductExpandable);
-                    }
-                }
-            });
-
-            return inputs;
-        }
-
-        @Override
-        public void registerDataSetObserver(DataSetObserver observer)
-        {
-
-        }
-
-        @Override
-        public void unregisterDataSetObserver(DataSetObserver observer)
-        {
-
-        }
-
-        @Override
-        public int getGroupCount()
-        {
-            return groups;
-        }
-
-        @Override
-        public int getChildrenCount(int groupPosition)
-        {
-            return children;
-        }
-
-        @Override
-        public Object getGroup(int groupPosition)
-        {
-            return "Group " + groupPosition;
-        }
-
-        @Override
-        public Object getChild(int groupPosition, int childPosition)
-        {
-            return "Child " + groupPosition + " " + childPosition;
-        }
-
-        @Override
-        public long getGroupId(int groupPosition)
-        {
-            return groupPosition;
-        }
-
-        @Override
-        public long getChildId(int groupPosition, int childPosition)
-        {
-            return childPosition;
-        }
-
-        @Override
-        public boolean hasStableIds()
-        {
-            return false;
-        }
-
-
-        @Override
-        public boolean isChildSelectable(int groupPosition, int childPosition)
-        {
-            return true;
-        }
-
-        @Override
-        public boolean areAllItemsEnabled()
-        {
-            return false;
-        }
-
-        @Override
-        public boolean isEmpty()
-        {
-            return false;
-        }
-
-        @Override
-        public void onGroupExpanded(int groupPosition)
-        {
-        }
-
-        @Override
-        public void onGroupCollapsed(int groupPosition)
-        {
-
-        }
-
-        @Override
-        public long getCombinedChildId(long groupId, long childId)
-        {
-            return 0;
-        }
-
-        @Override
-        public long getCombinedGroupId(long groupId)
-        {
-            return 0;
-        }
-    }
-
-    private class AddProductExpandable extends ExpandableListView
-    {
-        private int group;
-
-        public int getGroup()
-        {
-            return group;
-        }
-
-        public AddProductExpandable(Context context, int group)
-        {
-            super(context);
-            this.group = group;
-        }
-
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-        {
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(960,
-                    MeasureSpec.AT_MOST);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(800,
-                    MeasureSpec.AT_MOST);
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        }
-    }
 
     private void hideKeyboard(View v)
     {
