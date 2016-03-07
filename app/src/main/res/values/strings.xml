@@ -20,4 +20,5 @@
     <string name="total_products_price">Total: %1$s</string>
     <string name="reduce_amount">Reduce product amount</string>
     <string name="increase_product">Increase product amount</string>
+    <string name="amount">Amount</string>
 </resources>
