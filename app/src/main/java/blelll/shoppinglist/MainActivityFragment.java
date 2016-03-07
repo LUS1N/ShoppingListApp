@@ -5,7 +5,6 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -281,14 +280,6 @@ public class MainActivityFragment extends Fragment
 
             increaseButton.setOnClickListener(
                     new IncreaseProductAmountListener(groupPosition, childPosition - 1));
-
-//            DecreaseProductAmountListener decreaseListener = new DecreaseProductAmountListener(
-//                    groupPosition, childPosition, ((ExpandableListView) productListView));
-
-//            decreaseButton.setOnClickListener(decreaseListener);
-
-            Log.d("BB", productListView.getParent() + "");
-
 
             return productListView;
         }
