@@ -8,12 +8,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -31,18 +25,13 @@ public class ShopListDialogFragment extends DialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-
-
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-
 
         ArrayList<Shop> shops = Storage.getInstance().getShops();
         ArrayList<String> shopsName = new ArrayList<>();
         for(Shop shop :shops)
             shopsName.add(shop.toString());
-
-
 
         builder.setTitle(R.string.get_shops)
                 .setItems(shopsName.toArray(new String[shopsName.size()]), new DialogInterface.OnClickListener() {

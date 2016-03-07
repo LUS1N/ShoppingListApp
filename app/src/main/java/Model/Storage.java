@@ -126,4 +126,17 @@ public class Storage
         shoppingLists.get(0).addProduct(new Product("Beef meats", "meat", shops.get(0), 6));
 
     }
+
+    public Shop getShop(String shopName)
+    {
+        for (Shop shop : shops)
+        {
+            if (shop.getTitle().equals(shopName))
+                return shop;
+        }
+
+        Shop shop = new Shop(shopName);
+        shops.add(shop);
+        return shop;
+    }
 }

@@ -5,11 +5,16 @@ package Model;
  */
 public class Shop
 {
-    String title;
+    private String title;
 
     public Shop(String title)
     {
         this.title = title;
+    }
+
+    public String getTitle()
+    {
+        return title;
     }
 
     @Override

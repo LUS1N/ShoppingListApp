@@ -141,6 +141,24 @@ public class ModelTests
     }
 
     @Test
+    public void testGetShopByString()
+    {
+        String shopName = "TestShop";
+        Shop shop = new Shop(shopName);
+        storage.addShop(shop);
+        assertTrue(storage.getShop(shopName) == shop);
+    }
+
+    @Test
+    public void testGetShopThatDoesntExistYet()
+    {
+        String shopName = "TestShopABC";
+        Shop shop = storage.getShop(shopName);
+        assertNotNull(shop);
+        assertTrue(shop.getTitle().equals(shopName));
+    }
+
+    @Test
     public void testSL_get_items()
     {
         ShoppingList shoppingList = new ShoppingList("A");
