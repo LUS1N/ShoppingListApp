@@ -221,7 +221,7 @@ public class MainActivityFragment extends Fragment
             // for the header 0th index is used and all the items in the array are pushed by 1
             if (childPosition == 0)
             {
-                return setupHeader(groupPosition);
+                return setupHeader(groupPosition, parent);
             }
             else
             {
@@ -285,16 +285,25 @@ public class MainActivityFragment extends Fragment
         }
 
         @NonNull
-        private View setupHeader(int group)
+        private View setupHeader(final int group, ViewGroup parent)
         {
-            AddProductExpandable addProductExpandable = new AddProductExpandable(getContext(),
-                    group);
-            addProductExpandable.setAdapter(
-                    new Product_ExpandableListAdapter(addProductExpandable,
-                            addProductExpandable.getGroup(), inflater));
-            addProductExpandable.setGroupIndicator(null);
+            View view = inflater.inflate(R.layout.add_product_header, parent, false);
+            final ExpandableListView parentView = (ExpandableListView) parent;
+            view.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    ProductDialogFragment productDialogFragment = new ProductDialogFragment();
+                    productDialogFragment.setGroup(group);
+                    productDialogFragment.setBaseExpandableListAdapter((BaseExpandableListAdapter)
+                            parentView.getExpandableListAdapter());
 
-            return addProductExpandable;
+                    productDialogFragment.show(getActivity().getFragmentManager(), "");
+                }
+            });
+
+            return view;
         }
 
 
